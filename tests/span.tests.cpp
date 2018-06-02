@@ -3,8 +3,12 @@
 //#include <vector>
 
 TEST_GROUP(span);
-TEST_SETUP(span) {}
-TEST_TEAR_DOWN(span) {}
+TEST_SETUP(span)
+{
+}
+TEST_TEAR_DOWN(span)
+{
+}
 
 template <typename T, typename iterator>
 void EXPECT_SPAN_EQ(ehl::span<T>& dataSpan, iterator begin, iterator end)

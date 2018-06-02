@@ -26,21 +26,29 @@ namespace ehl
 
 	public:
 		span(iterator begin, size_type length)
-			: dataBegin(begin), dataEnd(begin + length)
+			: dataBegin(begin)
+			, dataEnd(begin + length)
 		{
 		}
 
-		span(iterator begin, iterator end) : dataBegin(begin), dataEnd(end) {}
+		span(iterator begin, iterator end)
+			: dataBegin(begin)
+			, dataEnd(end)
+		{
+		}
 		template <typename Cont>
 		span(Cont& cont,
-			 typename type_traits::enable_if<type_traits::is_container<Cont>::value,
-									  int>::type = 0)
-			: dataBegin(&cont[0]), dataEnd(&cont[0] + cont.size())
+			 typename type_traits::enable_if<
+				 type_traits::is_container<Cont>::value, int>::type = 0)
+			: dataBegin(&cont[0])
+			, dataEnd(&cont[0] + cont.size())
 		{
 		}
 
 		template <std::size_t length>
-		span(T (&data)[length]) : dataBegin(data), dataEnd(data + length)
+		span(T (&data)[length])
+			: dataBegin(data)
+			, dataEnd(data + length)
 		{
 		}
 
@@ -48,7 +56,8 @@ namespace ehl
 
 		template <typename U>
 		span(span<U> const& other)
-			: dataBegin(other.dataBegin), dataEnd(other.dataEnd)
+			: dataBegin(other.dataBegin)
+			, dataEnd(other.dataEnd)
 		{
 		}
 
@@ -60,15 +69,38 @@ namespace ehl
 			return *this;
 		}
 
-		size_type length() const { return dataEnd - dataBegin; }
-		iterator begin() { return dataBegin; }
-		const_iterator begin() const { return dataBegin; }
-		const_iterator cbegin() const { return dataBegin; }
-		iterator end() { return dataEnd; }
-		const_iterator end() const { return dataEnd; }
-		const_iterator cend() const { return dataEnd; }
-
-		reference operator[](size_type index) { return dataBegin[index]; }
+		size_type length() const
+		{
+			return dataEnd - dataBegin;
+		}
+		iterator begin()
+		{
+			return dataBegin;
+		}
+		const_iterator begin() const
+		{
+			return dataBegin;
+		}
+		const_iterator cbegin() const
+		{
+			return dataBegin;
+		}
+		iterator end()
+		{
+			return dataEnd;
+		}
+		const_iterator end() const
+		{
+			return dataEnd;
+		}
+		const_iterator cend() const
+		{
+			return dataEnd;
+		}
+		reference operator[](size_type index)
+		{
+			return dataBegin[index];
+		}
 		const_reference operator[](size_type index) const
 		{
 			return dataBegin[index];
