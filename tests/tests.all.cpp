@@ -1,5 +1,13 @@
 #include "unity_cpp.h"
 
+TEST_GROUP_RUNNER(events_tests)
+{
+	RUN_TEST_CASE(events_tests, A_global_void_event_handler_can_be_raised_by_void_event);
+	RUN_TEST_CASE(events_tests, A_class_void_event_handler_can_be_raised_by_void_event);
+	RUN_TEST_CASE(events_tests, A_global_event_handler_with_a_parameter_can_be_raised_by_event_with_a_matching_parameter);
+	RUN_TEST_CASE(events_tests, A_class_event_handler_with_a_parameter_can_be_raised_by_event_with_a_matching_parameter);
+}
+
 TEST_GROUP_RUNNER(fast_exponential_smoothing)
 {
 	RUN_TEST_CASE(fast_exponential_smoothing, No_smoothing_gives_back_the_value_passed_in);
@@ -33,6 +41,7 @@ TEST_GROUP_RUNNER(span)
 
 static void RunAllTests()
 {
+	RUN_TEST_GROUP(events_tests);
 	RUN_TEST_GROUP(fast_exponential_smoothing);
 	RUN_TEST_GROUP(exponential_smoothing);
 	RUN_TEST_GROUP(linear_interpolator_tests);

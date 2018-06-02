@@ -2,6 +2,7 @@
 add_executable(ehl.tests
 	main.cpp
 	tests.all.cpp
+	events.tests.cpp
 	exponential_smoothing.tests.cpp
 	fast_exponential_smoothing.tests.cpp
 	linear_interpolator.tests.cpp
