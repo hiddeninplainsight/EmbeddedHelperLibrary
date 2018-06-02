@@ -29,8 +29,7 @@ TEST(fast_exponential_smoothing, The_first_value_is_smoothed)
 	TEST_ASSERT_EQUAL_UINT16(64, smoothing.value());
 }
 
-TEST(fast_exponential_smoothing,
-	 The_second_value_is_smoothed_and_includes_part_of_the_first_value)
+TEST(fast_exponential_smoothing, The_second_value_is_smoothed_and_includes_part_of_the_first_value)
 {
 	ehl::fast_exponential_smoothing<3, uint16_t, uint32_t> smoothing;
 

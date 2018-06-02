@@ -14,10 +14,11 @@ namespace ehl
 		return d_first;
 	}
 
-	template<class InputIt, class UnaryPredicate>
+	template <class InputIt, class UnaryPredicate>
 	InputIt find_if(InputIt first, InputIt last, UnaryPredicate p)
 	{
-		for (; first != last; ++first) {
+		for (; first != last; ++first)
+		{
 			if (p(*first))
 			{
 				return first;

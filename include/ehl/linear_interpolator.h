@@ -1,8 +1,8 @@
 #ifndef EMBEDDEDHELPERLIBRARY_LINEAR_INTERPOLATOR_H
 #define EMBEDDEDHELPERLIBRARY_LINEAR_INTERPOLATOR_H
 
-#include "span.h"
 #include "algorithm.h"
+#include "span.h"
 
 namespace ehl
 {
