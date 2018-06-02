@@ -17,6 +17,18 @@ TEST_GROUP_RUNNER(rolling_average)
 	RUN_TEST_CASE(rolling_average, exponential_smoothing_can_be_passed_to_algorithms);
 }
 
+TEST_GROUP_RUNNER(literal_parser)
+{
+	RUN_TEST_CASE(literal_parser, Compile_time_checks);
+}
+
+TEST_GROUP_RUNNER(metafunctions)
+{
+	RUN_TEST_CASE(metafunctions, number_of_digits);
+	RUN_TEST_CASE(metafunctions, metastring);
+	RUN_TEST_CASE(metafunctions, number_to_string);
+}
+
 TEST_GROUP_RUNNER(fast_exponential_smoothing)
 {
 	RUN_TEST_CASE(fast_exponential_smoothing, No_smoothing_gives_back_the_value_passed_in);
@@ -57,6 +69,8 @@ static void RunAllTests()
 {
 	RUN_TEST_GROUP(events_tests);
 	RUN_TEST_GROUP(rolling_average);
+	RUN_TEST_GROUP(literal_parser);
+	RUN_TEST_GROUP(metafunctions);
 	RUN_TEST_GROUP(fast_exponential_smoothing);
 	RUN_TEST_GROUP(exponential_smoothing);
 	RUN_TEST_GROUP(linear_interpolator_tests);

@@ -2,6 +2,8 @@
 add_executable(ehl.tests
 	main.cpp
 	tests.all.cpp
+	meta/literal_parser.tests.cpp
+	meta/metafunctions.tests.cpp
 	events.tests.cpp
 	exponential_smoothing.tests.cpp
 	fast_exponential_smoothing.tests.cpp
