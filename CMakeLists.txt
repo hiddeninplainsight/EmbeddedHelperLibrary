@@ -7,5 +7,6 @@ if(${UNIX})
 
 endif(${UNIX})
 
+add_subdirectory(include)
 add_subdirectory(Unity)
 add_subdirectory(tests)

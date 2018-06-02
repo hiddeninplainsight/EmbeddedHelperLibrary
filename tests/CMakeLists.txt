@@ -12,3 +12,7 @@ add_custom_command(TARGET ehl.tests
 target_link_libraries(ehl.tests # Libraries for testing
 	ehl::unity
 	)
+
+target_link_libraries(ehl.tests
+	EmbeddedHelperLibrary
+	)
