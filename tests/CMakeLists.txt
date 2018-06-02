@@ -10,6 +10,7 @@ add_executable(ehl.tests
 	linear_interpolator.tests.cpp
 	rolling_average.tests.cpp
 	rolling_average_with_events.tests.cpp
+	safe_type.tests.cpp
 	span.tests.cpp
 	)
 

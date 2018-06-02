@@ -65,6 +65,17 @@ TEST_GROUP_RUNNER(span)
 	RUN_TEST_CASE(span, An_already_initialised_span_can_have_another_one_copied_over_it);
 }
 
+TEST_GROUP_RUNNER(safe_type)
+{
+	RUN_TEST_CASE(safe_type, underlying_valye_can_be_read);
+	RUN_TEST_CASE(safe_type, pre_increment_safe_types);
+	RUN_TEST_CASE(safe_type, adding_safe_types);
+	RUN_TEST_CASE(safe_type, subtracting_safe_types);
+	RUN_TEST_CASE(safe_type, comparing_safe_types);
+	RUN_TEST_CASE(safe_type, implicit_converting_safe_types);
+	RUN_TEST_CASE(safe_type, adding_multiple_operations);
+}
+
 static void RunAllTests()
 {
 	RUN_TEST_GROUP(events_tests);
@@ -76,6 +87,7 @@ static void RunAllTests()
 	RUN_TEST_GROUP(linear_interpolator_tests);
 	RUN_TEST_GROUP(rolling_average_with_event);
 	RUN_TEST_GROUP(span);
+	RUN_TEST_GROUP(safe_type);
 }
 
 int TestMain(int argc, char** argv)
