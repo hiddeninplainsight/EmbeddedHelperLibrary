@@ -6,6 +6,8 @@ add_executable(ehl.tests
 	exponential_smoothing.tests.cpp
 	fast_exponential_smoothing.tests.cpp
 	linear_interpolator.tests.cpp
+	rolling_average.tests.cpp
+	rolling_average_with_events.tests.cpp
 	span.tests.cpp
 	)
 

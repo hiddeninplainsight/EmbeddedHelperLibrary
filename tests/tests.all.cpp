@@ -8,6 +8,15 @@ TEST_GROUP_RUNNER(events_tests)
 	RUN_TEST_CASE(events_tests, A_class_event_handler_with_a_parameter_can_be_raised_by_event_with_a_matching_parameter);
 }
 
+TEST_GROUP_RUNNER(rolling_average)
+{
+	RUN_TEST_CASE(rolling_average, Initial_average_is_zero);
+	RUN_TEST_CASE(rolling_average, The_average_of_a_single_value_added_the_same_number_of_times_as_values_in_the_average_is_the_value);
+	RUN_TEST_CASE(rolling_average, The_average_of_a_multiple_values_without_rolling);
+	RUN_TEST_CASE(rolling_average, Values_added_to_the_average_before_it_rolls_are_not_included_in_the_average_once_it_has_rolled);
+	RUN_TEST_CASE(rolling_average, exponential_smoothing_can_be_passed_to_algorithms);
+}
+
 TEST_GROUP_RUNNER(fast_exponential_smoothing)
 {
 	RUN_TEST_CASE(fast_exponential_smoothing, No_smoothing_gives_back_the_value_passed_in);
@@ -30,6 +39,11 @@ TEST_GROUP_RUNNER(linear_interpolator_tests)
 	RUN_TEST_CASE(linear_interpolator_tests, Interpolating_a_value_in_the_middle_of_the_coordinates_with_a_y_offset);
 }
 
+TEST_GROUP_RUNNER(rolling_average_with_event)
+{
+	RUN_TEST_CASE(rolling_average_with_event, An_event_is_raised_when_a_value_is_added);
+}
+
 TEST_GROUP_RUNNER(span)
 {
 	RUN_TEST_CASE(span, A_span_initialised_from_a_C_style_array_covers_the_entire_array);
@@ -42,9 +56,11 @@ TEST_GROUP_RUNNER(span)
 static void RunAllTests()
 {
 	RUN_TEST_GROUP(events_tests);
+	RUN_TEST_GROUP(rolling_average);
 	RUN_TEST_GROUP(fast_exponential_smoothing);
 	RUN_TEST_GROUP(exponential_smoothing);
 	RUN_TEST_GROUP(linear_interpolator_tests);
+	RUN_TEST_GROUP(rolling_average_with_event);
 	RUN_TEST_GROUP(span);
 }
 
