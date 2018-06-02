@@ -2,6 +2,8 @@
 add_executable(ehl.tests
 	main.cpp
 	tests.all.cpp
+	exponential_smoothing.tests.cpp
+	fast_exponential_smoothing.tests.cpp
 	span.tests.cpp
 	)
 
