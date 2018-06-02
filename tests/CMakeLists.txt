@@ -4,6 +4,7 @@ add_executable(ehl.tests
 	tests.all.cpp
 	exponential_smoothing.tests.cpp
 	fast_exponential_smoothing.tests.cpp
+	linear_interpolator.tests.cpp
 	span.tests.cpp
 	)
 
