@@ -2,6 +2,7 @@
 add_executable(ehl.tests
 	main.cpp
 	tests.all.cpp
+	span.tests.cpp
 	)
 
 add_custom_command(TARGET ehl.tests
