@@ -20,5 +20,5 @@ build:
   project: build\EmbeddedHelperLibrary.sln
 
 after_build:
-  - cd c:\projects\EmbeddedHelperLibrary\build\test\Release
+  - cd c:\projects\EmbeddedHelperLibrary\build\tests\Release
   - ehl.tests.exe
