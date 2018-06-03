@@ -13,7 +13,7 @@ namespace ehl
 	public:
 		using value_type = T;
 		using reference = T&;
-		using const_reference = reference const;
+		using const_reference = T const&;
 
 		using iterator = iteratorT;
 		using const_iterator = iterator const;
