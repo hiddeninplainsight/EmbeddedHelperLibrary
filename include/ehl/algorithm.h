@@ -9,7 +9,9 @@ namespace ehl
 	{
 		while (first1 != last1)
 		{
-			*d_first++ = unary_op(*first1++);
+			*d_first = unary_op(*first1);
+			d_first++;
+			first1++;
 		}
 		return d_first;
 	}
