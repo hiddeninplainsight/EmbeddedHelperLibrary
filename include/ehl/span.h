@@ -36,10 +36,9 @@ namespace ehl
 			, dataEnd(end)
 		{
 		}
-		template <typename Cont>
-		span(Cont& cont,
-			 typename type_traits::enable_if<
-				 type_traits::is_container<Cont>::value, int>::type = 0)
+		template <typename Cont,
+				  typename = enable_if_t<is_container<Cont>::value>>
+		span(Cont& cont)
 			: dataBegin(&cont[0])
 			, dataEnd(&cont[0] + cont.size())
 		{

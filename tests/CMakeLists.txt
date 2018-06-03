@@ -4,6 +4,10 @@ add_executable(ehl.tests
 	tests.all.cpp
 	meta/literal_parser.tests.cpp
 	meta/metafunctions.tests.cpp
+	type_traits/copy_assign_t.tests.cpp
+	type_traits/detection_idiom.tests.cpp
+	type_traits/is_container.tests.cpp
+	type_traits/size_type_t.tests.cpp
 	events.tests.cpp
 	exponential_smoothing.tests.cpp
 	fast_exponential_smoothing.tests.cpp

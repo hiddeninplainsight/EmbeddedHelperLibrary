@@ -1,75 +1,55 @@
 #ifndef EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_CONTAINER_H
 #define EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_CONTAINER_H
 
-#include "is_type_base.h"
+#include "declval.h"
+#include "enable_if.h"
+#include "integral_constant.h"
+#include "is_same.h"
+#include "size_type_t.h"
+#include "void_t.h"
 
 namespace ehl
 {
-	namespace type_traits
+	template <typename T>
+	using container_iterator_t = typename T::iterator;
+
+	template <typename T>
+	using container_reference_t = typename T::reference;
+
+	template <typename T>
+	using container_begin_method_t = decltype(declval<T>().begin());
+
+	template <typename T>
+	using container_end_method_t = decltype(declval<T>().end());
+
+	// Braces around the `declval<container_size_t<T>>()` parameter to check the
+	// parameter
+	// type is correct
+	template <typename T>
+	using container_element_access_t =
+		decltype(declval<T>()[{declval<size_type_t<T>>()}]);
+
+	template <typename T>
+	using container_size_method_t = decltype(declval<T>().size());
+
+	template <typename T, typename = void>
+	struct is_container : false_type
 	{
-		template <class Cont>
-		struct is_container : protected is_type_base
-		{
-#ifdef __GNUG__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type"
-#endif
-			template <typename C>
-			static yes& HasSize(
-				FunctionSignatureMatches<typename C::size_type (C::*)() const,
-										 &C::size>* /*unused*/)
-			{
-			}
-			template <typename>
-			static no& HasSize(...)
-			{
-			}
+	};
 
-			template <typename C>
-			static yes& HasBegin(
-				FunctionSignatureMatches<typename C::iterator (C::*)(),
-										 &C::begin>* /*unused*/)
-			{
-			}
-			template <typename>
-			static no& HasBegin(...)
-			{
-			}
-
-			template <typename C>
-			static yes& HasEnd(
-				FunctionSignatureMatches<typename C::iterator (C::*)(),
-										 &C::end>* /*unused*/)
-			{
-			}
-			template <typename>
-			static no& HasEnd(...)
-			{
-			}
-
-			template <typename C>
-			static yes& HasElementAccess(
-				FunctionSignatureMatches <
-					typename C::reference (C::*)(typename C::size_type),
-				&C::operator[]>* /*unused*/)
-			{
-			}
-			template <typename>
-			static no& HasElementAccess(...)
-			{
-			}
-
-#ifdef __GNUG__
-#pragma GCC diagnostic pop
-#endif
-
-			static const bool value =
-				(sizeof(HasSize<Cont>(0)) == sizeof(yes)) &&
-				(sizeof(HasBegin<Cont>(0)) == sizeof(yes)) &&
-				(sizeof(HasEnd<Cont>(0)) == sizeof(yes)) &&
-				(sizeof(HasElementAccess<Cont>(0)) == sizeof(yes));
-		};
-	}
+	template <typename T>
+	struct is_container<
+		T, void_t<enable_if_t<is_same<container_iterator_t<T>,
+									  container_begin_method_t<T>>::value>,
+				  enable_if_t<is_same<container_iterator_t<T>,
+									  container_end_method_t<T>>::value>,
+				  enable_if_t<is_same<container_reference_t<T>,
+									  container_element_access_t<T>>::value>,
+				  enable_if_t<is_same<size_type_t<T>,
+									  container_size_method_t<T>>::value>>>
+		: true_type
+	{
+	};
 }
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_CONTAINER_H
