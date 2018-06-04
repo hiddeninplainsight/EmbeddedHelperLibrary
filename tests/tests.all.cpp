@@ -75,6 +75,7 @@ TEST_GROUP_RUNNER(safe_type)
 	RUN_TEST_CASE(safe_type, comparing_safe_types);
 	RUN_TEST_CASE(safe_type, implicit_converting_safe_types);
 	RUN_TEST_CASE(safe_type, adding_multiple_operations);
+	RUN_TEST_CASE(safe_type, operations_do_not_slice_extendable_objects);
 }
 
 static void RunAllTests()

@@ -39,7 +39,7 @@ TEST(safe_type, adding_safe_types)
 	safe a{1};
 	safe b{4};
 
-	auto result = a + b;
+	safe result = a + b;
 	TEST_ASSERT_EQUAL_INT(5, result.get());
 }
 
@@ -50,7 +50,7 @@ TEST(safe_type, subtracting_safe_types)
 	safe a{4};
 	safe b{3};
 
-	auto result = a - b;
+	safe result = a - b;
 	TEST_ASSERT_EQUAL_INT(1, result.get());
 }
 
@@ -106,6 +106,24 @@ TEST(safe_type, adding_multiple_operations)
 
 	safe a{0};
 	(void)a;
+
+	// This test passes if the code compiles
+}
+
+TEST(safe_type, operations_do_not_slice_extendable_objects)
+{
+	struct derived_safe : ehl::extendable_safe_type<int, derived_safe,
+		sto::add>
+	{
+		using ehl::extendable_safe_type<int, derived_safe,
+			sto::add>::extendable_safe_type;
+	};
+
+	derived_safe a{10};
+	derived_safe b{10};
+
+	derived_safe c = a + b;
+	(void)c;
 
 	// This test passes if the code compiles
 }

@@ -32,6 +32,33 @@ namespace ehl
 		}
 	};
 
+	template <typename T, typename Derived, template <typename> class... Operation>
+	class EBCO extendable_safe_type : public Operation<Derived>...
+	{
+	public:
+		using raw_type = T;
+
+	private:
+		T value;
+
+	public:
+		explicit constexpr extendable_safe_type(T const& value)
+			: value(value)
+		{
+		}
+
+		T& get()
+		{
+			return value;
+		}
+
+		constexpr T const& get() const
+		{
+			return value;
+		}
+	};
+
+
 	namespace safe_type_operation
 	{
 		template <typename T>
