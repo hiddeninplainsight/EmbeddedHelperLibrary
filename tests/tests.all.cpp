@@ -63,6 +63,7 @@ TEST_GROUP_RUNNER(span)
 	RUN_TEST_CASE(span, A_span_can_be_copied);
 	RUN_TEST_CASE(span, A_span_can_be_copied_to_a_const_version_of_itself);
 	RUN_TEST_CASE(span, An_already_initialised_span_can_have_another_one_copied_over_it);
+	RUN_TEST_CASE(span, Iterating_a_span_using_const_iterators_allows_reading_but_not_writing);
 }
 
 TEST_GROUP_RUNNER(safe_type)

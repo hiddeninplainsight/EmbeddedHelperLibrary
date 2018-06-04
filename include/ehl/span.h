@@ -7,18 +7,33 @@
 
 namespace ehl
 {
-	template <typename T, typename iteratorT = T*>
-	class span
+	template<typename T, typename = void>
+	struct span_types
 	{
-	public:
 		using value_type = T;
+
 		using reference = T&;
 		using const_reference = T const&;
 
-		using iterator = iteratorT;
-		using const_iterator = iterator const;
+		using iterator = T*;
+		using const_iterator = T const*;
 
 		using size_type = std::size_t;
+	};
+
+	template <typename T>
+	class span
+	{
+	public:
+		using value_type = typename span_types<T>::value_type;
+
+		using reference = typename span_types<T>::reference;
+		using const_reference = typename span_types<T>::const_reference;
+
+		using iterator = typename span_types<T>::iterator;
+		using const_iterator = typename span_types<T>::const_iterator;
+
+		using size_type = typename span_types<T>::size_type;
 
 	private:
 		iterator dataBegin;
@@ -72,34 +87,42 @@ namespace ehl
 		{
 			return dataEnd - dataBegin;
 		}
+
 		iterator begin()
 		{
 			return dataBegin;
 		}
+
 		const_iterator begin() const
 		{
 			return dataBegin;
 		}
+
 		const_iterator cbegin() const
 		{
 			return dataBegin;
 		}
+
 		iterator end()
 		{
 			return dataEnd;
 		}
+
 		const_iterator end() const
 		{
 			return dataEnd;
 		}
+
 		const_iterator cend() const
 		{
 			return dataEnd;
 		}
+
 		reference operator[](size_type index)
 		{
 			return dataBegin[index];
 		}
+
 		const_reference operator[](size_type index) const
 		{
 			return dataBegin[index];

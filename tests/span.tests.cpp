@@ -1,4 +1,6 @@
 #include <ehl/span.h>
+#include <ehl/type_traits/is_same.h>
+#include <ehl/type_traits/declval.h>
 #include <unity_cpp.h>
 //#include <vector>
 
@@ -105,4 +107,25 @@ TEST(span, An_already_initialised_span_can_have_another_one_copied_over_it)
 	copiedSpan = originalSpan;
 
 	EXPECT_SPAN_EQ<int, int*>(copiedSpan, data, data + 4);
+}
+
+TEST(span, Iterating_a_span_using_const_iterators_allows_reading_but_not_writing)
+{
+	int data[] = {3, 5, 7, 9};
+
+	ehl::span<int> const dataSpan(data);
+
+	auto begin = dataSpan.begin();
+
+	TEST_ASSERT_EQUAL_INT(data[0], *begin);
+	++begin;
+
+	using ehl::is_same;
+	using ehl::declval;
+	using ehl::span;
+
+	static_assert(is_same<int const*, decltype(declval<span<int> const>().begin())>::value, "");
+	static_assert(is_same<int const*, decltype(declval<span<int> const>().end())>::value, "");
+	static_assert(is_same<int const*, decltype(declval<span<int>>().cbegin())>::value, "");
+	static_assert(is_same<int const*, decltype(declval<span<int>>().cend())>::value, "");
 }
