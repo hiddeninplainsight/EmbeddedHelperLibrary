@@ -6,56 +6,49 @@
 
 namespace ehl
 {
-	template <typename T, typename Tag, template <typename> class... Operation>
-	class EBCO safe_type : public Operation<safe_type<T, Tag, Operation...>>...
+	namespace detail
 	{
-	public:
-		using raw_type = T;
-
-	private:
-		T value;
-
-	public:
-		explicit constexpr safe_type(T const& value)
-			: value(value)
+		template <typename T>
+		class safe_type_common
 		{
-		}
+		public:
+			using raw_type = T;
 
-		T& get()
-		{
-			return value;
-		}
+		private:
+			T value;
 
-		constexpr T const& get() const
-		{
-			return value;
-		}
+		public:
+			explicit constexpr safe_type_common(T const& value)
+				: value(value)
+			{
+			}
+
+			T& get()
+			{
+				return value;
+			}
+
+			constexpr T const& get() const
+			{
+				return value;
+			}
+		};
+	}
+
+	template <typename T, typename Tag, template <typename> class... Operation>
+	class EBCO safe_type
+		: public detail::safe_type_common<T>
+		, public Operation<safe_type<T, Tag, Operation...>>...
+	{
+		using detail::safe_type_common<T>::safe_type_common;
 	};
 
 	template <typename T, typename Derived, template <typename> class... Operation>
-	class EBCO extendable_safe_type : public Operation<Derived>...
+	class EBCO extendable_safe_type
+		: public detail::safe_type_common<T>
+		, public Operation<Derived>...
 	{
-	public:
-		using raw_type = T;
-
-	private:
-		T value;
-
-	public:
-		explicit constexpr extendable_safe_type(T const& value)
-			: value(value)
-		{
-		}
-
-		T& get()
-		{
-			return value;
-		}
-
-		constexpr T const& get() const
-		{
-			return value;
-		}
+		using detail::safe_type_common<T>::safe_type_common;
 	};
 
 
