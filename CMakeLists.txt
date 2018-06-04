@@ -7,6 +7,6 @@ if(${UNIX})
 	set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Werror -fno-rtti -fno-exceptions")
 endif(${UNIX})
 
-add_subdirectory(include)
+add_subdirectory(src)
 add_subdirectory(Unity)
 add_subdirectory(tests)
