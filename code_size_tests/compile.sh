@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-COMPILE="arm-linux-gnueabi-g++-5 -std=c++11 -O3 -S"
+compile_and_strip () {
+    arm-none-eabi-g++ -std=c++11 -O3 -S $1.cpp -o - | awk '!/\./' > $1.s
+}
 
-${COMPILE} code_size_add_int.cpp
-${COMPILE} code_size_add_safe_type.cpp
+compile_and_strip code_size_add_int
+compile_and_strip code_size_add_safe_type
 
-${COMPILE} code_size_copy_int_collection.cpp
-${COMPILE} code_size_copy_safe_type_collection.cpp
+compile_and_strip code_size_copy_int_collection
+compile_and_strip code_size_copy_safe_type_collection
