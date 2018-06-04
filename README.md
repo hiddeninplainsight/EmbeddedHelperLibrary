@@ -1,6 +1,6 @@
 
 [![Travis build status](https://travis-ci.org/hiddeninplainsight/EmbeddedHelperLibrary.svg?branch=master)](https://travis-ci.org/hiddeninplainsight/EmbeddedHelperLibrary/)
-[![Build status](https://ci.appveyor.com/api/projects/status/wn1o2oeb4i9yr4y6/branch/master?svg=true)](https://ci.appveyor.com/project/byran/embeddedhelperlibrary/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/ldc163cmxvvh9q9v?svg=true)](https://ci.appveyor.com/project/byran/embeddedhelperlibrary/branch/master)
 
 # Embedded Helper Library
 This class library implements a set of operations that are common when
