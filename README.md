@@ -10,3 +10,7 @@ developing embedded systems.
 
 This library is licensed using the MIT License. See the
 [LICENSE.md](LICENSE.md) file. 
+
+## Documentation
+
+[<ehl/safe_type.h>](doc/safe_type.md)
