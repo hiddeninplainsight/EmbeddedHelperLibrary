@@ -1,0 +1,18 @@
+
+/*void copy(from_t* begin, from_t* end, to_t* destination)
+{
+    for(auto it = begin; it != end; ++it, ++destination)
+    {
+        *destination = *it;
+    }
+}*/
+
+void copy(from_t* source, to_t* destination, int length)
+{
+    for(int i = 0; i < length; ++i)
+    {
+        *destination = *source;
+        ++source;
+        ++destination;
+    }
+}
