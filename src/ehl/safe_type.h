@@ -41,6 +41,18 @@ namespace ehl
 		, public Operation<safe_type<T, Tag, Operation...>>...
 	{
 		using detail::safe_type_common<T>::safe_type_common;
+	public:
+		using type = safe_type<T, Tag, Operation...>;
+
+		// Allow construct from r-value and assign to l-value but do not
+		// allow assign to r-value as it will make code that doesn't make sense
+		// like `a + b = c` valid.
+		safe_type(type&&) = default;
+		type& operator=(type const&) & = default;
+		type& operator=(type&&) & = default;
+
+		type& operator=(type const&) && = delete;
+		type& operator=(type&&) && = delete;
 	};
 
 	template <typename T, typename Derived, template <typename> class... Operation>

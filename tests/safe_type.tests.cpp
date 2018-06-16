@@ -1,5 +1,7 @@
 #include <ehl/safe_type.h>
 #include <unity_cpp.h>
+#include <ehl/type_traits/declval.h>
+#include <ehl/type_traits/detection_idiom.h>
 
 TEST_GROUP(safe_type);
 TEST_SETUP(safe_type)
@@ -42,6 +44,25 @@ TEST(safe_type, adding_safe_types)
 	safe result = a + b;
 	TEST_ASSERT_EQUAL_INT(5, result.get());
 }
+
+template<typename T>
+using invalid_add_operation = decltype(ehl::declval<T&>() + ehl::declval<T&>() = ehl::declval<T&>());
+
+TEST(safe_type, can_assign_to_lvalue_but_not_to_rvalue_of_safe_types)
+{
+	using safe = ehl::safe_type<int, struct int_tag, sto::add>;
+	// This test passes if the code compiles
+
+	safe a{0};
+	safe b{1};
+
+	a = b;
+
+	TEST_ASSERT_EQUAL_INT(1, a.get());
+
+	static_assert(!ehl::is_detected<invalid_add_operation, safe>::value, "'a + b = c' incorrectly allowed for safe_type");
+}
+
 
 TEST(safe_type, subtracting_safe_types)
 {
