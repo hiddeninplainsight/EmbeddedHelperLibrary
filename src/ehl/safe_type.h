@@ -49,9 +49,11 @@ namespace ehl
 		// like `a + b = c` valid.
 		safe_type(type&&) = default;
 		type& operator=(type const&) & = default;
+#if !defined(_MSC_VER)
 		type& operator=(type&&) & = default;
 
 		type& operator=(type const&) && = delete;
+#endif // !defined(_MSC_VER)
 		type& operator=(type&&) && = delete;
 	};
 
