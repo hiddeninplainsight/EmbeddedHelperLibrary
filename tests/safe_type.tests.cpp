@@ -13,15 +13,15 @@ TEST_TEAR_DOWN(safe_type)
 
 namespace sto = ehl::safe_type_operation;
 
-TEST(safe_type, underlying_valye_can_be_read)
+TEST(safe_type, underlying_value_can_be_read)
 {
 	using safe = ehl::safe_type<int, struct int_tag>;
 
 	safe a{1};
-	TEST_ASSERT_EQUAL_INT(1, a.get());
+	TEST_ASSERT_EQUAL_INT(1, a.raw_value());
 
 	safe b{2};
-	TEST_ASSERT_EQUAL_INT(2, b.get());
+	TEST_ASSERT_EQUAL_INT(2, b.raw_value());
 }
 
 TEST(safe_type, pre_increment_safe_types)
@@ -31,7 +31,7 @@ TEST(safe_type, pre_increment_safe_types)
 	safe a{1};
 	++a;
 
-	TEST_ASSERT_EQUAL_INT(2, a.get());
+	TEST_ASSERT_EQUAL_INT(2, a.raw_value());
 }
 
 TEST(safe_type, adding_safe_types)
@@ -42,7 +42,7 @@ TEST(safe_type, adding_safe_types)
 	safe b{4};
 
 	safe result = a + b;
-	TEST_ASSERT_EQUAL_INT(5, result.get());
+	TEST_ASSERT_EQUAL_INT(5, result.raw_value());
 }
 
 template<typename T>
@@ -58,7 +58,7 @@ TEST(safe_type, can_assign_to_lvalue_but_not_to_rvalue_of_safe_types)
 
 	a = b;
 
-	TEST_ASSERT_EQUAL_INT(1, a.get());
+	TEST_ASSERT_EQUAL_INT(1, a.raw_value());
 
 	static_assert(!ehl::is_detected<invalid_add_operation, safe>::value, "'a + b = c' incorrectly allowed for safe_type");
 }
@@ -72,7 +72,7 @@ TEST(safe_type, subtracting_safe_types)
 	safe b{3};
 
 	safe result = a - b;
-	TEST_ASSERT_EQUAL_INT(1, result.get());
+	TEST_ASSERT_EQUAL_INT(1, result.raw_value());
 }
 
 TEST(safe_type, comparing_safe_types)
@@ -112,7 +112,7 @@ TEST(safe_type, implicit_converting_safe_types)
 	safe value{51};
 	safe_int value_int = value;
 
-	TEST_ASSERT_EQUAL_INT(51, value_int.get());
+	TEST_ASSERT_EQUAL_INT(51, value_int.raw_value());
 }
 
 TEST(safe_type, adding_multiple_operations)

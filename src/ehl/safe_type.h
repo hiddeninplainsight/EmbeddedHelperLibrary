@@ -19,16 +19,16 @@ namespace ehl
 
 		public:
 			explicit constexpr safe_type_common(T const& value)
-				: value(value)
+				: value{value}
 			{
 			}
 
-			T& get()
+			T& raw_value()
 			{
 				return value;
 			}
 
-			constexpr T const& get() const
+			constexpr T const& raw_value() const
 			{
 				return value;
 			}
@@ -71,7 +71,7 @@ namespace ehl
 		{
 			T operator+(T const& right) const
 			{
-				return T(this->derived_object().get() + right.get());
+				return T(this->derived_object().raw_value() + right.raw_value());
 			}
 		};
 
@@ -80,7 +80,7 @@ namespace ehl
 		{
 			T operator-(T const& right) const
 			{
-				return T(this->derived_object().get() - right.get());
+				return T(this->derived_object().raw_value() - right.raw_value());
 			}
 		};
 
@@ -89,7 +89,7 @@ namespace ehl
 		{
 			T& operator++()
 			{
-				++this->derived_object().get();
+				++this->derived_object().raw_value();
 				return this->derived_object();
 			}
 		};
@@ -99,7 +99,7 @@ namespace ehl
 		{
 			bool operator==(T const& other) const
 			{
-				return this->derived_object().get() == other.get();
+				return this->derived_object().raw_value() == other.raw_value();
 			}
 		};
 
@@ -108,7 +108,7 @@ namespace ehl
 		{
 			bool operator!=(T const& other) const
 			{
-				return this->derived_object().get() != other.get();
+				return this->derived_object().raw_value() != other.raw_value();
 			}
 		};
 
@@ -117,7 +117,7 @@ namespace ehl
 		{
 			bool operator<(T const& other) const
 			{
-				return this->derived_object().get() < other.get();
+				return this->derived_object().raw_value() < other.raw_value();
 			}
 		};
 
@@ -126,7 +126,7 @@ namespace ehl
 		{
 			bool operator<=(T const& other) const
 			{
-				return this->derived_object().get() <= other.get();
+				return this->derived_object().raw_value() <= other.raw_value();
 			}
 		};
 
@@ -135,7 +135,7 @@ namespace ehl
 		{
 			bool operator>(T const& other) const
 			{
-				return this->derived_object().get() > other.get();
+				return this->derived_object().raw_value() > other.raw_value();
 			}
 		};
 
@@ -144,7 +144,7 @@ namespace ehl
 		{
 			bool operator>=(T const& other) const
 			{
-				return this->derived_object().get() >= other.get();
+				return this->derived_object().raw_value() >= other.raw_value();
 			}
 		};
 
@@ -166,7 +166,7 @@ namespace ehl
 			{
 				operator U() const
 				{
-					return U{this->derived_object().get()};
+					return U{this->derived_object().raw_value()};
 				}
 			};
 		};

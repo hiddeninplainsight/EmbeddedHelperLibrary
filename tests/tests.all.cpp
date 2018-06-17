@@ -68,7 +68,7 @@ TEST_GROUP_RUNNER(span)
 
 TEST_GROUP_RUNNER(safe_type)
 {
-	RUN_TEST_CASE(safe_type, underlying_valye_can_be_read);
+	RUN_TEST_CASE(safe_type, underlying_value_can_be_read);
 	RUN_TEST_CASE(safe_type, pre_increment_safe_types);
 	RUN_TEST_CASE(safe_type, adding_safe_types);
 	RUN_TEST_CASE(safe_type, can_assign_to_lvalue_but_not_to_rvalue_of_safe_types);
