@@ -7,7 +7,7 @@
 
 namespace ehl
 {
-	template<typename T, typename = void>
+	template <typename T, typename = void>
 	struct span_types
 	{
 		using value_type = T;
