@@ -35,38 +35,6 @@ namespace ehl
 		};
 	}
 
-	template <typename Tag, typename T, typename Limit,
-			  template <typename> class... Operation>
-	class EBCO safe_type
-		: public detail::safe_type_common<T, Limit>,
-		  public Operation<safe_type<Tag, T, Limit, Operation...>>...
-	{
-		using detail::safe_type_common<T, Limit>::safe_type_common;
-
-	public:
-		using type = safe_type<Tag, T, Limit, Operation...>;
-
-		// Allow construct from r-value and assign to l-value but do not
-		// allow assign to r-value as it will make code that doesn't make sense
-		// like `a + b = c` valid.
-		safe_type(type&&) = default;
-		type& operator=(type const&) & = default;
-#if !defined(_MSC_VER)
-		type& operator=(type&&) & = default;
-
-		type& operator=(type const&) && = delete;
-#endif  // !defined(_MSC_VER)
-		type& operator=(type&&) && = delete;
-	};
-
-	template <typename Derived, typename T, typename Limit,
-			  template <typename> class... Operation>
-	class EBCO extendable_safe_type : public detail::safe_type_common<T, Limit>,
-									  public Operation<Derived>...
-	{
-		using detail::safe_type_common<T, Limit>::safe_type_common;
-	};
-
 	namespace safe_type_limit
 	{
 		struct none
@@ -100,6 +68,49 @@ namespace ehl
 			}
 		};
 	}
+
+	template <typename Tag, typename T, typename Limit,
+			  template <typename> class... Operation>
+	class EBCO safe_type_limited
+		: public detail::safe_type_common<T, Limit>,
+		  public Operation<safe_type_limited<Tag, T, Limit, Operation...>>...
+	{
+		using detail::safe_type_common<T, Limit>::safe_type_common;
+
+	public:
+		using type = safe_type_limited<Tag, T, Limit, Operation...>;
+
+		// Allow construct from r-value and assign to l-value but do not
+		// allow assign to r-value as it will make code that doesn't make sense
+		// like `a + b = c` valid.
+		safe_type_limited(type&&) = default;
+		type& operator=(type const&) & = default;
+#if !defined(_MSC_VER)
+		type& operator=(type&&) & = default;
+
+		type& operator=(type const&) && = delete;
+#endif  // !defined(_MSC_VER)
+		type& operator=(type&&) && = delete;
+	};
+
+	template <typename Tag, typename T, template <typename> class... Operation>
+	using safe_type =
+		safe_type_limited<Tag, T, safe_type_limit::none, Operation...>;
+
+	template <typename Derived, typename T, typename Limit,
+			  template <typename> class... Operation>
+	class EBCO extendable_safe_type_limited
+		: public detail::safe_type_common<T, Limit>,
+		  public Operation<Derived>...
+	{
+		using detail::safe_type_common<T, Limit>::safe_type_common;
+	};
+
+	template <typename Derived, typename T,
+			  template <typename> class... Operation>
+	using extendable_safe_type =
+		extendable_safe_type_limited<Derived, T, safe_type_limit::none,
+									 Operation...>;
 
 	namespace safe_type_operation
 	{

@@ -16,7 +16,7 @@ namespace limit = ehl::safe_type_limit;
 
 TEST(safe_type, underlying_value_can_be_read)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::none>;
+	using safe = ehl::safe_type<struct int_tag, int>;
 
 	safe a{1};
 	TEST_ASSERT_EQUAL_INT(1, a.raw_value());
@@ -27,7 +27,7 @@ TEST(safe_type, underlying_value_can_be_read)
 
 TEST(safe_type, pre_increment_safe_types)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::none, sto::preincrement>;
+	using safe = ehl::safe_type<struct int_tag, int, sto::preincrement>;
 
 	safe a{1};
 	++a;
@@ -37,7 +37,7 @@ TEST(safe_type, pre_increment_safe_types)
 
 TEST(safe_type, adding_safe_types)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::none, sto::add>;
+	using safe = ehl::safe_type<struct int_tag, int, sto::add>;
 
 	safe a{1};
 	safe b{4};
@@ -51,7 +51,7 @@ using invalid_add_operation = decltype(ehl::declval<T&>() + ehl::declval<T&>() =
 
 TEST(safe_type, can_assign_to_lvalue_but_not_to_rvalue_of_safe_types)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::none, sto::add>;
+	using safe = ehl::safe_type<struct int_tag, int, sto::add>;
 	// This test passes if the code compiles
 
 	safe a{0};
@@ -67,7 +67,7 @@ TEST(safe_type, can_assign_to_lvalue_but_not_to_rvalue_of_safe_types)
 
 TEST(safe_type, subtracting_safe_types)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::none, sto::subtract>;
+	using safe = ehl::safe_type<struct int_tag, int, sto::subtract>;
 
 	safe a{4};
 	safe b{3};
@@ -78,7 +78,7 @@ TEST(safe_type, subtracting_safe_types)
 
 TEST(safe_type, comparing_safe_types)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::none, sto::compare>;
+	using safe = ehl::safe_type<struct int_tag, int, sto::compare>;
 
 	safe one{1};
 	safe oneOther{1};
@@ -105,9 +105,9 @@ TEST(safe_type, comparing_safe_types)
 
 TEST(safe_type, implicit_converting_safe_types)
 {
-	using safe_int = ehl::safe_type<struct int_tag, int, limit::none>;
+	using safe_int = ehl::safe_type<struct int_tag, int>;
 
-	using safe = ehl::safe_type<struct char_tag, char, limit::none,
+	using safe = ehl::safe_type<struct char_tag, char,
 		sto::implicitly_convert_to<safe_int>::operation>;
 
 	safe value{51};
@@ -118,7 +118,7 @@ TEST(safe_type, implicit_converting_safe_types)
 
 TEST(safe_type, adding_multiple_operations)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::none,
+	using safe = ehl::safe_type<struct int_tag, int,
 		sto::add,
 		sto::subtract,
 		sto::preincrement,
@@ -134,10 +134,10 @@ TEST(safe_type, adding_multiple_operations)
 
 TEST(safe_type, operations_do_not_slice_extendable_objects)
 {
-	struct derived_safe : ehl::extendable_safe_type<derived_safe, int, limit::none,
+	struct derived_safe : ehl::extendable_safe_type<derived_safe, int,
 		sto::add>
 	{
-		using ehl::extendable_safe_type<derived_safe, int, limit::none,
+		using ehl::extendable_safe_type<derived_safe, int,
 			sto::add>::extendable_safe_type;
 	};
 
@@ -152,7 +152,7 @@ TEST(safe_type, operations_do_not_slice_extendable_objects)
 
 TEST(safe_type, range_limit_cannot_be_exceeded_for_safe_types)
 {
-	using safe = ehl::safe_type<struct int_tag, int, limit::range<int, 2, 4>>;
+	using safe = ehl::safe_type_limited<struct int_tag, int, limit::range<int, 2, 4>>;
 
 	safe a{1};
 	TEST_ASSERT_EQUAL_INT(2, a.raw_value());
@@ -166,9 +166,9 @@ TEST(safe_type, range_limit_cannot_be_exceeded_for_safe_types)
 
 TEST(safe_type, range_limit_cannot_be_exceeded_for_derived_safe_types)
 {
-	struct derived_safe : ehl::extendable_safe_type<derived_safe, int, limit::range<int, 10, 20>>
+	struct derived_safe : ehl::extendable_safe_type_limited<derived_safe, int, limit::range<int, 10, 20>>
 	{
-		using ehl::extendable_safe_type<derived_safe, int, limit::range<int, 10, 20>>::extendable_safe_type;
+		using ehl::extendable_safe_type_limited<derived_safe, int, limit::range<int, 10, 20>>::extendable_safe_type_limited;
 	};
 
 	derived_safe a{1};
@@ -180,3 +180,4 @@ TEST(safe_type, range_limit_cannot_be_exceeded_for_derived_safe_types)
 	derived_safe c{100};
 	TEST_ASSERT_EQUAL_INT(20, c.raw_value());
 }
+
