@@ -8,7 +8,7 @@ namespace ehl
 {
 	namespace detail
 	{
-		template <typename T>
+		template <typename T, typename Limit>
 		class safe_type_common
 		{
 		public:
@@ -19,7 +19,7 @@ namespace ehl
 
 		public:
 			explicit constexpr safe_type_common(T const& value)
-				: value{value}
+				: value{Limit::apply(value)}
 			{
 			}
 
@@ -35,14 +35,16 @@ namespace ehl
 		};
 	}
 
-	template <typename T, typename Tag, template <typename> class... Operation>
+	template <typename Tag, typename T, typename Limit,
+			  template <typename> class... Operation>
 	class EBCO safe_type
-		: public detail::safe_type_common<T>
-		, public Operation<safe_type<T, Tag, Operation...>>...
+		: public detail::safe_type_common<T, Limit>,
+		  public Operation<safe_type<Tag, T, Limit, Operation...>>...
 	{
-		using detail::safe_type_common<T>::safe_type_common;
+		using detail::safe_type_common<T, Limit>::safe_type_common;
+
 	public:
-		using type = safe_type<T, Tag, Operation...>;
+		using type = safe_type<Tag, T, Limit, Operation...>;
 
 		// Allow construct from r-value and assign to l-value but do not
 		// allow assign to r-value as it will make code that doesn't make sense
@@ -53,18 +55,51 @@ namespace ehl
 		type& operator=(type&&) & = default;
 
 		type& operator=(type const&) && = delete;
-#endif // !defined(_MSC_VER)
+#endif  // !defined(_MSC_VER)
 		type& operator=(type&&) && = delete;
 	};
 
-	template <typename T, typename Derived, template <typename> class... Operation>
-	class EBCO extendable_safe_type
-		: public detail::safe_type_common<T>
-		, public Operation<Derived>...
+	template <typename Derived, typename T, typename Limit,
+			  template <typename> class... Operation>
+	class EBCO extendable_safe_type : public detail::safe_type_common<T, Limit>,
+									  public Operation<Derived>...
 	{
-		using detail::safe_type_common<T>::safe_type_common;
+		using detail::safe_type_common<T, Limit>::safe_type_common;
 	};
 
+	namespace safe_type_limit
+	{
+		struct none
+		{
+			template <typename T>
+			static constexpr T const& apply(T const& value)
+			{
+				return value;
+			}
+		};
+
+		template <typename T, T min, T max>
+		class range
+		{
+			static_assert(min < max, "Invalid range for safe_type");
+
+			static T constexpr min_limit(T const& value)
+			{
+				return (value < min) ? min : value;
+			}
+
+			static T constexpr max_limit(T const& value)
+			{
+				return (value > max) ? max : value;
+			}
+
+		public:
+			static T constexpr apply(T const& value)
+			{
+				return min_limit(max_limit(value));
+			}
+		};
+	}
 
 	namespace safe_type_operation
 	{
@@ -73,7 +108,8 @@ namespace ehl
 		{
 			T operator+(T const& right) const
 			{
-				return T(this->derived_object().raw_value() + right.raw_value());
+				return T(this->derived_object().raw_value() +
+						 right.raw_value());
 			}
 		};
 
@@ -82,7 +118,8 @@ namespace ehl
 		{
 			T operator-(T const& right) const
 			{
-				return T(this->derived_object().raw_value() - right.raw_value());
+				return T(this->derived_object().raw_value() -
+						 right.raw_value());
 			}
 		};
 
