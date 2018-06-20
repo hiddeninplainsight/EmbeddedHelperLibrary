@@ -6,17 +6,17 @@ their underlying types are the same, unlike built in types.
 
 ## Usage
 
-### `ehl::safe_type<underlying, tag, operations...>`
+### `ehl::safe_type<tag, underlying, operations...>`
 
 This template provides a simple template for creating a safe type without any
 advanced functionality. 
 
 Template parameters:
 
-* `underlying` - the type to be wrapped by the safe type.
 * `tag` - a tag type to make type unique. If the type you are creating is
   called `xyz_t` then specify this as `struct xyz_t_tag`. (Note the type only
   needs to be declared not defined) 
+* `underlying` - the type to be wrapped by the safe type.
 * `operations...` - a list of operation templates that describe what operations
   the type supports. See [operations](#operations) section below 
 
@@ -25,7 +25,7 @@ Template parameters:
 ```
 #include &lt;ehl/safe_type.h&gt;
 
-using id_t = ehl::safe_type&lt;unsigned int, struct id_t_tag&gt;;
+using id_t = ehl::safe_type&lt;struct id_t_tag, unsigned int&gt;;
 
 id_t myIdentification{10};
 
@@ -35,7 +35,7 @@ This code creates a type called `id_t` using an `unsigned int` as its
 underlying type and then instantiates an instance of `id_t` called
 `myIdentification`.
 
-### `ehl::extendable_safe_type<underlying, derived, operations...>`
+### `ehl::extendable_safe_type<derived, underlying, operations...>`
 
 This template provides a simple template for creating a safe type by
 inheriting from it, allowing additional custom behaviors to be added to the
@@ -44,8 +44,8 @@ type.
 
 Template parameters:
 
-* `underlying` - the type to be wrapped by the safe type.
 * `derived` - the type of the class using this type as a base class. 
+* `underlying` - the type to be wrapped by the safe type.
 * `operations...` - a list of operation templates that describe what operations
   the type supports. See [operations](#operations) section below 
 
@@ -54,10 +54,10 @@ Template parameters:
 ```
 #include &lt;ehl/safe_type.h&gt;
 
-class id_t : public ehl::extendable_safe_type&lt;unsigned int, id_t&gt;
+class id_t : public ehl::extendable_safe_type&lt;id_t, unsigned int&gt;
 {
     // Import the constructors from the base class
-    using ehl::extendable_safe_type&lt;unsigned int, id_t&gt;::extendable_safe_type;
+    using ehl::extendable_safe_type&lt;id_t, unsigned int&gt;::extendable_safe_type;
     
     void additional_behavior();
 };
@@ -85,7 +85,7 @@ Adds the binary `+` operator for the type.
 ```
 #include &lt;ehl/safe_type.h&gt;
 
-using addable_t = ehl::safe_type&lt;unsigned int, struct addable_t_tag,
+using addable_t = ehl::safe_type&lt;struct addable_t_tag, unsigned int,
     ehl::safe_type_operation::add&gt;;
 
 addable_t a{10};
@@ -104,12 +104,12 @@ Adds the binary `-` operator for the type.
 ```
 #include &lt;ehl/safe_type.h&gt;
 
-using addable_t = ehl::safe_type&lt;unsigned int, struct addable_t_tag,
+using subtractable_t = ehl::safe_type&lt;struct subtractable_t_tag, unsigned int,
     ehl::safe_type_operation::subtract&gt;;
 
-addable_t a{10};
-addable_t a{15};
+subtractable_t a{10};
+subtractable_t a{15};
 
-addable_t c = a - b;
+subtractable_t c = a - b;
 
 ```
