@@ -46,6 +46,17 @@ TEST(safe_type, adding_safe_types)
 	TEST_ASSERT_EQUAL_INT(5, result.raw_value());
 }
 
+TEST(safe_type, can_copy_construct_an_lvalue)
+{
+	using safe = ehl::safe_type<struct int_tag, int, sto::add>;
+	// This test passes if the code compiles
+
+	safe a{34};
+	safe b{a};
+
+	TEST_ASSERT_EQUAL_INT(34, b.raw_value());
+}
+
 template<typename T>
 using invalid_add_operation = decltype(ehl::declval<T&>() + ehl::declval<T&>() = ehl::declval<T&>());
 

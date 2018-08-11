@@ -84,6 +84,7 @@ namespace ehl
 		// allow assign to r-value as it will make code that doesn't make sense
 		// like `a + b = c` valid.
 		safe_type_limited(type&&) = default;
+		safe_type_limited(type const&) = default;
 		type& operator=(type const&) & = default;
 #if !defined(_MSC_VER)
 		type& operator=(type&&) & = default;
