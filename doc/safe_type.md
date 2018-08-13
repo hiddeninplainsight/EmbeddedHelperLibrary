@@ -23,9 +23,9 @@ Template parameters:
 #### Examples
 
 ```
-#include &lt;ehl/safe_type.h&gt;
+#include <ehl/safe_type.h>
 
-using id_t = ehl::safe_type&lt;struct id_t_tag, unsigned int&gt;;
+using id_t = ehl::safe_type<struct id_t_tag, unsigned int>;
 
 id_t myIdentification{10};
 
@@ -52,12 +52,12 @@ Template parameters:
 #### Examples
 
 ```
-#include &lt;ehl/safe_type.h&gt;
+#include <ehl/safe_type.h>
 
-class id_t : public ehl::extendable_safe_type&lt;id_t, unsigned int&gt;
+class id_t : public ehl::extendable_safe_type<id_t, unsigned int>
 {
     // Import the constructors from the base class
-    using ehl::extendable_safe_type&lt;id_t, unsigned int&gt;::extendable_safe_type;
+    using ehl::extendable_safe_type<id_t, unsigned int>::extendable_safe_type;
     
     void additional_behavior();
 };
@@ -83,10 +83,10 @@ Adds the binary `+` operator for the type.
 #### Examples
 
 ```
-#include &lt;ehl/safe_type.h&gt;
+#include <ehl/safe_type.h>
 
-using addable_t = ehl::safe_type&lt;struct addable_t_tag, unsigned int,
-    ehl::safe_type_operation::add&gt;;
+using addable_t = ehl::safe_type<struct addable_t_tag, unsigned int,
+    ehl::safe_type_operation::add>;
 
 addable_t a{10};
 addable_t a{15};
@@ -102,10 +102,10 @@ Adds the binary `-` operator for the type.
 #### Examples
 
 ```
-#include &lt;ehl/safe_type.h&gt;
+#include <ehl/safe_type.h>
 
-using subtractable_t = ehl::safe_type&lt;struct subtractable_t_tag, unsigned int,
-    ehl::safe_type_operation::subtract&gt;;
+using subtractable_t = ehl::safe_type<struct subtractable_t_tag, unsigned int,
+    ehl::safe_type_operation::subtract>;
 
 subtractable_t a{10};
 subtractable_t a{15};
