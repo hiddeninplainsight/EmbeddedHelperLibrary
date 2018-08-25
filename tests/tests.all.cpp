@@ -66,6 +66,16 @@ TEST_GROUP_RUNNER(span)
 	RUN_TEST_CASE(span, Iterating_a_span_using_const_iterators_allows_reading_but_not_writing);
 }
 
+TEST_GROUP_RUNNER(either_tests)
+{
+	RUN_TEST_CASE(either_tests, An_uninitialised_either_is_neither_of_the_types_it_stores);
+	RUN_TEST_CASE(either_tests, Settings_a_value_matching_the_first_type_makes_the_either_represent_that_type);
+	RUN_TEST_CASE(either_tests, Settings_a_value_matching_the_second_type_makes_the_either_represent_that_type);
+	RUN_TEST_CASE(either_tests, The_set_value_can_be_retrieved);
+	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_is_destroyed_when_a_different_type_value_is_set);
+	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_as_the_second_type_is_destroyed_when_a_different_type_value_is_set);
+}
+
 TEST_GROUP_RUNNER(safe_type)
 {
 	RUN_TEST_CASE(safe_type, underlying_value_can_be_read);
@@ -93,6 +103,7 @@ static void RunAllTests()
 	RUN_TEST_GROUP(linear_interpolator_tests);
 	RUN_TEST_GROUP(rolling_average_with_event);
 	RUN_TEST_GROUP(span);
+	RUN_TEST_GROUP(either_tests);
 	RUN_TEST_GROUP(safe_type);
 }
 

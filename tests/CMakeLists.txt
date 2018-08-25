@@ -8,6 +8,7 @@ add_executable(ehl.tests
 	type_traits/detection_idiom.tests.cpp
 	type_traits/is_container.tests.cpp
 	type_traits/size_type_t.tests.cpp
+	either.tests.cpp
 	events.tests.cpp
 	exponential_smoothing.tests.cpp
 	fast_exponential_smoothing.tests.cpp
