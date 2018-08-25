@@ -5,67 +5,150 @@
 
 namespace ehl
 {
-	template<typename T1, typename T2>
-	class either
+	namespace detail
 	{
-	private:
-		unsigned int valid_type{0};
-
-		alignas(T1) alignas(T2) unsigned char value[sizeof(T1) > sizeof(T2) ? sizeof(T1) : sizeof(T2)];
-
-		bool is(T1*)
+		template<unsigned int index, typename T, typename... Tother>
+		class either_functions : public either_functions<index + 1, Tother...>
 		{
-			return valid_type == 1;
-		}
+		private:
+			using base = either_functions<index + 1, Tother...>;
 
-		bool is(T2*)
-		{
-			return valid_type == 2;
-		}
+		protected:
+			using base::valid_type;
+			using base::is;
+			using base::delete_object;
+			using base::data;
+			using base::as;
 
-		void delete_object()
-		{
-			switch(valid_type)
+			bool is(T *)
 			{
-				case 1:
-					reinterpret_cast<T1*>(value)->~T1();
-					break;
-				case 2:
-					reinterpret_cast<T2*>(value)->~T2();
-					break;
-				default:
-					break;
+				return valid_type == index;
+			}
+
+			void delete_object(unsigned char *value)
+			{
+				if (valid_type == index)
+				{
+					reinterpret_cast<T *>(value)->~T();
+				}
+				else
+				{
+					base::delete_object(value);
+				}
+			}
+
+			T& as(T *)
+			{
+				return *reinterpret_cast<T *>(data());
+			}
+
+		public:
+			using base::set;
+
+			void set(T const &v)
+			{
+				delete_object();
+				valid_type = 0;
+				new(data()) T{v};
+				valid_type = index;
+			}
+		};
+
+		template<unsigned int index, typename T>
+		class either_functions<index, T>
+		{
+		protected:
+			unsigned int valid_type{0};
+
+			virtual void delete_object() = 0;
+			virtual unsigned char *data() = 0;
+
+			bool is(T *)
+			{
+				return valid_type == index;
+			}
+
+			void delete_object(unsigned char *value)
+			{
+				if (valid_type == index)
+				{
+					reinterpret_cast<T *>(value)->~T();
+				}
+			}
+
+			T& as(T *)
+			{
+				return *reinterpret_cast<T *>(data());
+			}
+
+		public:
+			void set(T const &v)
+			{
+				delete_object();
+				valid_type = 0;
+				new(data()) T{v};
+				valid_type = index;
+			}
+		};
+
+		template<typename T, typename... Tother>
+		struct largest_type
+		{
+			static ::std::size_t constexpr size =
+				sizeof(T) > largest_type<Tother...>::size ? sizeof(T)
+														  : largest_type<Tother...>::size;
+			static auto constexpr alignment =
+				alignof(T) > largest_type<Tother...>::alignment ? alignof(T)
+														  : largest_type<Tother...>::alignment;
+
+		};
+
+		template<typename T>
+		struct largest_type<T>
+		{
+			static ::std::size_t constexpr size = sizeof(T);
+			static auto constexpr alignment = alignof(T);
+		};
+	}
+
+	template<typename... T>
+	class either : detail::either_functions<1, T...>
+	{
+	protected:
+		alignas(detail::largest_type<T...>::alignment) unsigned char value[detail::largest_type<T...>::size];
+
+		using base = detail::either_functions<1, T...>;
+
+		using base::valid_type;
+		using base::is;
+		using base::as;
+
+		unsigned char* data() override
+		{
+			return value;
+		}
+
+		void delete_object() override
+		{
+			if(valid_type != 0)
+			{
+				base::delete_object(value);
 			}
 		}
 	public:
-		template<typename T>
+
+		using base::set;
+
+		template<typename U>
 		bool is()
 		{
-			return is(static_cast<T*>(nullptr));
+			return is(static_cast<U*>(nullptr));
 		}
 
-		void set(T1 const& v)
+		template<typename U>
+		U& as()
 		{
-			delete_object();
-			new(value) T1{v};
-			valid_type = 1;
-		}
-
-		void set(T2 const& v)
-		{
-			delete_object();
-			new(value) T2{v};
-			valid_type = 2;
-		}
-
-		explicit operator T1 const&()
-		{
-			return *reinterpret_cast<T1*>(value);
-		}
-
-		explicit operator T2 const&()
-		{
-			return *reinterpret_cast<T2*>(value);
+			return as(static_cast<U*>(nullptr));
 		}
 	};
 }

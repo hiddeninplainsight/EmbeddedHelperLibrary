@@ -44,11 +44,11 @@ TEST(either_tests, The_set_value_can_be_retrieved)
 
 	target.set(static_cast<long>(24));
 
-	TEST_ASSERT_EQUAL(24, static_cast<long>(target));
+	TEST_ASSERT_EQUAL(24, target.as<long>());
 
 	target.set(static_cast<int>(32));
 
-	TEST_ASSERT_EQUAL(32, static_cast<int>(target));
+	TEST_ASSERT_EQUAL(32, target.as<int>());
 }
 
 namespace
