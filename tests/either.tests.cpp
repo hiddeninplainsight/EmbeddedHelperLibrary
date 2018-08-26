@@ -1,7 +1,7 @@
 #include <ehl/either.h>
-#include <unity_cpp.h>
+#include <ehl/as_rvalue.h>
 
-#include <utility>
+#include <unity_cpp.h>
 
 TEST_GROUP(either_tests);
 TEST_SETUP(either_tests)
@@ -124,7 +124,7 @@ TEST(either_tests, An_object_that_has_been_set_can_be_move_constructed)
 		ehl::either<long, counter> target;
 		target.set(c);
 
-		ehl::either<long, counter> moved_to{::std::move(target)};
+		ehl::either<long, counter> moved_to{::ehl::as_rvalue(target)};
 	}
 
 	TEST_ASSERT_EQUAL(0, count);
@@ -139,10 +139,10 @@ TEST(either_tests, An_object_that_has_been_set_can_be_move_using_operator_assign
 		ehl::either<long, counter> target;
 
 		{
-			ehl::either<long, counter> move_from{::std::move(target)};
+			ehl::either<long, counter> move_from{::ehl::as_rvalue(target)};
 			move_from.set(c);
 
-			target = ::std::move(move_from);
+			target = ::ehl::as_rvalue(move_from);
 		}
 	}
 
