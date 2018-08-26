@@ -74,6 +74,9 @@ TEST_GROUP_RUNNER(either_tests)
 	RUN_TEST_CASE(either_tests, The_set_value_can_be_retrieved);
 	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_is_destroyed_when_a_different_type_value_is_set);
 	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_as_the_second_type_is_destroyed_when_a_different_type_value_is_set);
+	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_is_destroyed_when_the_either_is_destroyed);
+	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_can_be_move_constructed);
+	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_can_be_move_using_operator_assignment);
 }
 
 TEST_GROUP_RUNNER(safe_type)

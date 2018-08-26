@@ -136,6 +136,36 @@ namespace ehl
 			}
 		}
 	public:
+		either() = default;
+		either(either const&) = delete;
+		either& operator=(either const&) = delete;
+
+		either(either&& other) noexcept
+		{
+			valid_type = other.valid_type;
+			for(::std::size_t i = 0; i < sizeof(value); ++i)
+			{
+				value[i] = other.value[i];
+			}
+			other.valid_type = 0;
+		}
+
+		either& operator=(either&& other) noexcept
+		{
+			valid_type = other.valid_type;
+			for(::std::size_t i = 0; i < sizeof(value); ++i)
+			{
+				value[i] = other.value[i];
+			}
+			other.valid_type = 0;
+
+			return *this;
+		}
+
+		~either()
+		{
+			delete_object();
+		}
 
 		using base::set;
 

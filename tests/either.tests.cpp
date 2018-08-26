@@ -1,6 +1,8 @@
 #include <ehl/either.h>
 #include <unity_cpp.h>
 
+#include <utility>
+
 TEST_GROUP(either_tests);
 TEST_SETUP(either_tests)
 {
@@ -100,3 +102,49 @@ TEST(either_tests, An_object_that_has_been_set_as_the_second_type_is_destroyed_w
 	TEST_ASSERT_EQUAL(0, count);
 }
 
+TEST(either_tests, An_object_that_has_been_set_is_destroyed_when_the_either_is_destroyed)
+{
+	int count{0};
+	counter c{&count};
+
+	{
+		ehl::either<long, counter> target;
+		target.set(c);
+	}
+
+	TEST_ASSERT_EQUAL(0, count);
+}
+
+TEST(either_tests, An_object_that_has_been_set_can_be_move_constructed)
+{
+	int count{0};
+	counter c{&count};
+
+	{
+		ehl::either<long, counter> target;
+		target.set(c);
+
+		ehl::either<long, counter> moved_to{::std::move(target)};
+	}
+
+	TEST_ASSERT_EQUAL(0, count);
+}
+
+TEST(either_tests, An_object_that_has_been_set_can_be_move_using_operator_assignment)
+{
+	int count{0};
+	counter c{&count};
+
+	{
+		ehl::either<long, counter> target;
+
+		{
+			ehl::either<long, counter> move_from{::std::move(target)};
+			move_from.set(c);
+
+			target = ::std::move(move_from);
+		}
+	}
+
+	TEST_ASSERT_EQUAL(0, count);
+}
