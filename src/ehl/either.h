@@ -2,6 +2,7 @@
 #define EMBEDDEDHELPERLIBRARY_EITHER_H
 
 #include <new>
+#include "rvalue.h"
 
 namespace ehl
 {
@@ -52,6 +53,14 @@ namespace ehl
 				new(data()) T{v};
 				valid_type = index;
 			}
+
+			void set(T&& v)
+			{
+				delete_object();
+				valid_type = 0;
+				new(data()) T(::ehl::forward<T>(v));
+				valid_type = index;
+			}
 		};
 
 		template<unsigned int index, typename T>
@@ -87,6 +96,14 @@ namespace ehl
 				delete_object();
 				valid_type = 0;
 				new(data()) T{v};
+				valid_type = index;
+			}
+
+			void set(T&& v)
+			{
+				delete_object();
+				valid_type = 0;
+				new(data()) T(::ehl::forward<T>(v));
 				valid_type = index;
 			}
 		};

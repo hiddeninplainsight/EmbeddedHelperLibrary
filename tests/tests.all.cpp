@@ -77,6 +77,7 @@ TEST_GROUP_RUNNER(either_tests)
 	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_is_destroyed_when_the_either_is_destroyed);
 	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_can_be_move_constructed);
 	RUN_TEST_CASE(either_tests, An_object_that_has_been_set_can_be_move_using_operator_assignment);
+	RUN_TEST_CASE(either_tests, An_object_can_be_moved_into_the_either);
 }
 
 TEST_GROUP_RUNNER(safe_type)

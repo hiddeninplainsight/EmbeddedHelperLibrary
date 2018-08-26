@@ -1,5 +1,5 @@
 #include <ehl/either.h>
-#include <ehl/as_rvalue.h>
+#include <ehl/rvalue.h>
 
 #include <unity_cpp.h>
 
@@ -147,4 +147,25 @@ TEST(either_tests, An_object_that_has_been_set_can_be_move_using_operator_assign
 	}
 
 	TEST_ASSERT_EQUAL(0, count);
+}
+
+namespace
+{
+	struct move_only
+	{
+		move_only() = default;
+		move_only(move_only const&) = delete;
+		move_only(move_only&&) = default;
+	};
+}
+
+TEST(either_tests, An_object_can_be_moved_into_the_either)
+{
+	ehl::either<long, move_only> target;
+
+	move_only object;
+
+	target.set(::ehl::as_rvalue(object));
+
+	// If this compiles it passes
 }
