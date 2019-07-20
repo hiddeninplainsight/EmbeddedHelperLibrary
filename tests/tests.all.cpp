@@ -8,6 +8,18 @@ TEST_GROUP_RUNNER(exponential_smoothing)
 	RUN_TEST_CASE(exponential_smoothing, exponential_smoothing_can_be_passed_to_algorithms);
 }
 
+TEST_GROUP_RUNNER(isr_circular_buffer_tests)
+{
+	RUN_TEST_CASE(isr_circular_buffer_tests, The_buffer_is_initially_empty);
+	RUN_TEST_CASE(isr_circular_buffer_tests, Pushing_a_value_to_a_buffer_increments_its_length);
+	RUN_TEST_CASE(isr_circular_buffer_tests, A_pushed_value_can_be_read_back);
+	RUN_TEST_CASE(isr_circular_buffer_tests, Popping_an_empty_value_gives_an_invalid_value);
+	RUN_TEST_CASE(isr_circular_buffer_tests, You_cannot_push_more_values_than_the_buffer_can_hold);
+	RUN_TEST_CASE(isr_circular_buffer_tests, Pushing_and_popping_values_when_the_buffer_should_wrap);
+	RUN_TEST_CASE(isr_circular_buffer_tests, The_length_is_still_correct_after_the_buffer_has_wrapped);
+	RUN_TEST_CASE(isr_circular_buffer_tests, Popping_values_pushed_after_the_buffer_has_wrapped);
+}
+
 TEST_GROUP_RUNNER(fast_exponential_smoothing)
 {
 	RUN_TEST_CASE(fast_exponential_smoothing, No_smoothing_gives_back_the_value_passed_in);
@@ -117,6 +129,7 @@ TEST_GROUP_RUNNER(events_tests)
 static void RunAllTests()
 {
 	RUN_TEST_GROUP(exponential_smoothing);
+	RUN_TEST_GROUP(isr_circular_buffer_tests);
 	RUN_TEST_GROUP(fast_exponential_smoothing);
 	RUN_TEST_GROUP(isr_written_variable_tests);
 	RUN_TEST_GROUP(safe_type);

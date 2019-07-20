@@ -12,6 +12,7 @@ add_executable(ehl.tests
 	events.tests.cpp
 	exponential_smoothing.tests.cpp
 	fast_exponential_smoothing.tests.cpp
+	isr_circular_buffer.tests.cpp
 	isr_read_variable.tests.cpp
 	isr_written_variable.tests.cpp
 	linear_interpolator.tests.cpp
