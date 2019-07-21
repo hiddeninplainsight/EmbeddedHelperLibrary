@@ -1,16 +1,16 @@
 #ifndef EMBEDDEDHELPERLIBRARY_CIRCULAR_BUFFER_H
 #define EMBEDDEDHELPERLIBRARY_CIRCULAR_BUFFER_H
 
-#include <cstdlib>
-
 namespace ehl
 {
-	template<typename T, size_t buffer_elements>
+	using isr_circular_buffer_size_t = unsigned int;
+
+	template<typename T, isr_circular_buffer_size_t buffer_elements>
 	class isr_circular_buffer
 	{
 	private:
-		volatile size_t head{0};
-		volatile size_t tail{0};
+		volatile isr_circular_buffer_size_t head{0};
+		volatile isr_circular_buffer_size_t tail{0};
 		volatile T buffer[buffer_elements];
 
 	public:
@@ -28,23 +28,23 @@ namespace ehl
 			}
 		};
 
-		size_t length() const;
+		isr_circular_buffer_size_t length() const;
 		bool push(T value);
 		popped_value pop();
 	};
 
-	template<typename T, size_t buffer_elements>
-	size_t isr_circular_buffer<T, buffer_elements>::length() const
+	template<typename T, isr_circular_buffer_size_t buffer_elements>
+	isr_circular_buffer_size_t isr_circular_buffer<T, buffer_elements>::length() const
 	{
 		if(tail > head)
 			return (buffer_elements - tail) + head;
 		return head - tail;
 	}
 
-	template<typename T, size_t buffer_elements>
+	template<typename T, isr_circular_buffer_size_t buffer_elements>
 	bool isr_circular_buffer<T, buffer_elements>::push(T value)
 	{
-		size_t next_head = (head + 1) % buffer_elements;
+		isr_circular_buffer_size_t next_head = (head + 1) % buffer_elements;
 
 		if(next_head == tail)
 			return false;
@@ -54,7 +54,7 @@ namespace ehl
 		return true;
 	}
 
-	template<typename T, size_t buffer_elements>
+	template<typename T, isr_circular_buffer_size_t buffer_elements>
 	auto isr_circular_buffer<T, buffer_elements>::pop() -> popped_value
 	{
 		if(tail == head)
