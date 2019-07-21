@@ -36,14 +36,13 @@ namespace ehl
 
 		operator T() const
 		{
-			modified = false;
-			T v = value;
-			while(modified)
+			while(true)
 			{
 				modified = false;
-				v = value;
+				T v = value;
+				if(!modified)
+					return v;
 			}
-			return v;
 		}
 	};
 }
