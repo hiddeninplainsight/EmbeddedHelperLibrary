@@ -3,6 +3,7 @@
 
 #include <new>
 #include "rvalue.h"
+#include "type_traits/largest_type.h"
 
 namespace ehl
 {
@@ -107,32 +108,13 @@ namespace ehl
 				valid_type = index;
 			}
 		};
-
-		template<typename T, typename... Tother>
-		struct largest_type
-		{
-			static ::std::size_t constexpr size =
-				sizeof(T) > largest_type<Tother...>::size ? sizeof(T)
-														  : largest_type<Tother...>::size;
-			static auto constexpr alignment =
-				alignof(T) > largest_type<Tother...>::alignment ? alignof(T)
-														  : largest_type<Tother...>::alignment;
-
-		};
-
-		template<typename T>
-		struct largest_type<T>
-		{
-			static ::std::size_t constexpr size = sizeof(T);
-			static auto constexpr alignment = alignof(T);
-		};
 	}
 
 	template<typename... T>
 	class either : detail::either_functions<1, T...>
 	{
 	protected:
-		alignas(detail::largest_type<T...>::alignment) unsigned char value[detail::largest_type<T...>::size];
+		alignas(largest_type<T...>::alignment) unsigned char value[largest_type<T...>::size];
 
 		using base = detail::either_functions<1, T...>;
 
