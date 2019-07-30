@@ -36,6 +36,6 @@ namespace ehl
 
 	template <typename T>
 	using remove_cv_t = typename remove_cv<T>::type;
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_REMOVE_CV_H

@@ -128,6 +128,6 @@ namespace ehl
 			return dataBegin[index];
 		}
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_SPAN_H

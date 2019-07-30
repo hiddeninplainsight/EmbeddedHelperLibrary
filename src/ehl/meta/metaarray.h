@@ -16,7 +16,7 @@ namespace ehl
 		template <typename T, T... args>
 		constexpr
 			typename metaarray<T, args...>::type metaarray<T, args...>::value;
-	}
-}
+	}  // namespace meta
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_META_ARRAY_H

@@ -14,6 +14,6 @@ namespace ehl
 	struct is_same<T, T> : true_type
 	{
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_SAME_H

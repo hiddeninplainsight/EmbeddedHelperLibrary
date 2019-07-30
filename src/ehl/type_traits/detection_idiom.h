@@ -31,7 +31,7 @@ namespace ehl
 			using value_t = true_type;
 			using type = Op<Args...>;
 		};
-	}
+	}  // namespace detail
 
 	template <template <class...> class Op, class... Args>
 	using is_detected =
@@ -46,6 +46,6 @@ namespace ehl
 
 	template <class Expected, template <class...> class Op, class... Args>
 	using is_detected_exact = is_same<Expected, detected_t<Op, Args...>>;
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_DETECTION_IDIOM_H

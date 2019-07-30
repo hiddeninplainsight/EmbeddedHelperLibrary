@@ -11,7 +11,7 @@ namespace ehl
 		struct metastring : metaarray<char, args..., '\0'>
 		{
 		};
-	}
-}
+	}  // namespace meta
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_META_STRING_H

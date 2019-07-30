@@ -28,6 +28,6 @@ namespace ehl
 		}
 		return last;
 	}
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_ALGORITHM_H

@@ -43,6 +43,6 @@ namespace ehl
 			return value();
 		}
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_EXPONENTIAL_SMOOTHING_H

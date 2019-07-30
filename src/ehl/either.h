@@ -9,29 +9,29 @@ namespace ehl
 {
 	namespace detail
 	{
-		template<unsigned int index, typename T, typename... Tother>
+		template <unsigned int index, typename T, typename... Tother>
 		class either_functions : public either_functions<index + 1, Tother...>
 		{
 		private:
 			using base = either_functions<index + 1, Tother...>;
 
 		protected:
-			using base::valid_type;
-			using base::is;
-			using base::delete_object;
-			using base::data;
 			using base::as;
+			using base::data;
+			using base::delete_object;
+			using base::is;
+			using base::valid_type;
 
-			bool is(T *)
+			bool is(T*)
 			{
 				return valid_type == index;
 			}
 
-			void delete_object(unsigned char *value)
+			void delete_object(unsigned char* value)
 			{
 				if (valid_type == index)
 				{
-					reinterpret_cast<T *>(value)->~T();
+					reinterpret_cast<T*>(value)->~T();
 				}
 				else
 				{
@@ -39,19 +39,19 @@ namespace ehl
 				}
 			}
 
-			T& as(T *)
+			T& as(T*)
 			{
-				return *reinterpret_cast<T *>(data());
+				return *reinterpret_cast<T*>(data());
 			}
 
 		public:
 			using base::set;
 
-			void set(T const &v)
+			void set(T const& v)
 			{
 				delete_object();
 				valid_type = 0;
-				new(data()) T{v};
+				new (data()) T{v};
 				valid_type = index;
 			}
 
@@ -59,44 +59,44 @@ namespace ehl
 			{
 				delete_object();
 				valid_type = 0;
-				new(data()) T(::ehl::forward<T>(v));
+				new (data()) T(::ehl::forward<T>(v));
 				valid_type = index;
 			}
 		};
 
-		template<unsigned int index, typename T>
+		template <unsigned int index, typename T>
 		class either_functions<index, T>
 		{
 		protected:
 			unsigned int valid_type{0};
 
 			virtual void delete_object() = 0;
-			virtual unsigned char *data() = 0;
+			virtual unsigned char* data() = 0;
 
-			bool is(T *)
+			bool is(T*)
 			{
 				return valid_type == index;
 			}
 
-			void delete_object(unsigned char *value)
+			void delete_object(unsigned char* value)
 			{
 				if (valid_type == index)
 				{
-					reinterpret_cast<T *>(value)->~T();
+					reinterpret_cast<T*>(value)->~T();
 				}
 			}
 
-			T& as(T *)
+			T& as(T*)
 			{
-				return *reinterpret_cast<T *>(data());
+				return *reinterpret_cast<T*>(data());
 			}
 
 		public:
-			void set(T const &v)
+			void set(T const& v)
 			{
 				delete_object();
 				valid_type = 0;
-				new(data()) T{v};
+				new (data()) T{v};
 				valid_type = index;
 			}
 
@@ -104,23 +104,24 @@ namespace ehl
 			{
 				delete_object();
 				valid_type = 0;
-				new(data()) T(::ehl::forward<T>(v));
+				new (data()) T(::ehl::forward<T>(v));
 				valid_type = index;
 			}
 		};
-	}
+	}  // namespace detail
 
-	template<typename... T>
+	template <typename... T>
 	class either : detail::either_functions<1, T...>
 	{
 	protected:
-		alignas(largest_type<T...>::alignment) unsigned char value[largest_type<T...>::size];
+		alignas(largest_type<
+				T...>::alignment) unsigned char value[largest_type<T...>::size];
 
 		using base = detail::either_functions<1, T...>;
 
-		using base::valid_type;
-		using base::is;
 		using base::as;
+		using base::is;
+		using base::valid_type;
 
 		unsigned char* data() override
 		{
@@ -129,11 +130,12 @@ namespace ehl
 
 		void delete_object() override
 		{
-			if(valid_type != 0)
+			if (valid_type != 0)
 			{
 				base::delete_object(value);
 			}
 		}
+
 	public:
 		either() = default;
 		either(either const&) = delete;
@@ -142,7 +144,7 @@ namespace ehl
 		either(either&& other) noexcept
 		{
 			valid_type = other.valid_type;
-			for(::std::size_t i = 0; i < sizeof(value); ++i)
+			for (::std::size_t i = 0; i < sizeof(value); ++i)
 			{
 				value[i] = other.value[i];
 			}
@@ -152,7 +154,7 @@ namespace ehl
 		either& operator=(either&& other) noexcept
 		{
 			valid_type = other.valid_type;
-			for(::std::size_t i = 0; i < sizeof(value); ++i)
+			for (::std::size_t i = 0; i < sizeof(value); ++i)
 			{
 				value[i] = other.value[i];
 			}
@@ -168,18 +170,18 @@ namespace ehl
 
 		using base::set;
 
-		template<typename U>
+		template <typename U>
 		bool is()
 		{
 			return is(static_cast<U*>(nullptr));
 		}
 
-		template<typename U>
+		template <typename U>
 		U& as()
 		{
 			return as(static_cast<U*>(nullptr));
 		}
 	};
-}
+}  // namespace ehl
 
-#endif //EMBEDDEDHELPERLIBRARY_EITHER_H
+#endif  // EMBEDDEDHELPERLIBRARY_EITHER_H

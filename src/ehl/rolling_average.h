@@ -48,6 +48,6 @@ namespace ehl
 			return value();
 		}
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_ROLLING_AVERAGE_H

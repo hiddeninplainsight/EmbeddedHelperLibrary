@@ -5,16 +5,16 @@
 
 namespace ehl
 {
-	template<typename T>
+	template <typename T>
 	struct is_lvalue_reference : public false_type
 	{
 	};
 
-	template<typename T>
+	template <typename T>
 	struct is_lvalue_reference<T&> : public true_type
 	{
 	};
 
-}
+}  // namespace ehl
 
-#endif //EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_LVALUE_REFERENCE_H
+#endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_LVALUE_REFERENCE_H

@@ -19,6 +19,6 @@ namespace ehl
 	struct rank<T[]> : integral_constant<size_t, 1u + rank<T>::value>
 	{
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_RANK_H

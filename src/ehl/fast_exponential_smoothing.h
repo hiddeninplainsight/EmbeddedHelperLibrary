@@ -41,6 +41,6 @@ namespace ehl
 			return value();
 		}
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_FAST_EXPONENTIAL_SMOOTHING_H

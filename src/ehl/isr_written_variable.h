@@ -5,7 +5,7 @@
 
 namespace ehl
 {
-	template<typename T>
+	template <typename T>
 	class isr_written_variable
 	{
 	private:
@@ -16,7 +16,7 @@ namespace ehl
 		isr_written_variable() = default;
 
 		isr_written_variable(T initial_value)
-			:value{as_rvalue(initial_value)}
+			: value{as_rvalue(initial_value)}
 		{
 		}
 
@@ -36,15 +36,15 @@ namespace ehl
 
 		operator T() const
 		{
-			while(true)
+			while (true)
 			{
 				modified = false;
 				T v = value;
-				if(!modified)
+				if (!modified)
 					return v;
 			}
 		}
 	};
-}
+}  // namespace ehl
 
-#endif //EMBEDDEDHELPERLIBRARY_ISR_WRITTEN_VARIABLE_H
+#endif  // EMBEDDEDHELPERLIBRARY_ISR_WRITTEN_VARIABLE_H

@@ -24,7 +24,7 @@ namespace ehl
 				static constexpr char const* const value =
 					metastring<args...>::value;
 			};
-		}
+		}  // namespace internal
 
 		template <unsigned int number>
 		struct number_to_string
@@ -33,7 +33,7 @@ namespace ehl
 				internal::number_to_string<number_of_digits<number>::value,
 										   number>::value;
 		};
-	}
-}
+	}  // namespace meta
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_META_NUMBER_TO_STRING_H

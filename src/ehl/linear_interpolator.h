@@ -69,5 +69,5 @@ namespace ehl
 			return interpolate(x);
 		}
 	};
-}
+}  // namespace ehl
 #endif  // EMBEDDEDHELPERLIBRARY_LINEAR_INTERPOLATOR_H

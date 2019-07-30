@@ -5,7 +5,7 @@ namespace ehl
 {
 	using isr_circular_buffer_size_t = unsigned int;
 
-	template<typename T, isr_circular_buffer_size_t buffer_elements>
+	template <typename T, isr_circular_buffer_size_t buffer_elements>
 	class isr_circular_buffer
 	{
 	private:
@@ -33,20 +33,21 @@ namespace ehl
 		popped_value pop();
 	};
 
-	template<typename T, isr_circular_buffer_size_t buffer_elements>
-	isr_circular_buffer_size_t isr_circular_buffer<T, buffer_elements>::length() const
+	template <typename T, isr_circular_buffer_size_t buffer_elements>
+	isr_circular_buffer_size_t isr_circular_buffer<T, buffer_elements>::length()
+		const
 	{
-		if(tail > head)
+		if (tail > head)
 			return (buffer_elements - tail) + head;
 		return head - tail;
 	}
 
-	template<typename T, isr_circular_buffer_size_t buffer_elements>
+	template <typename T, isr_circular_buffer_size_t buffer_elements>
 	bool isr_circular_buffer<T, buffer_elements>::push(T value)
 	{
 		isr_circular_buffer_size_t next_head = (head + 1) % buffer_elements;
 
-		if(next_head == tail)
+		if (next_head == tail)
 			return false;
 
 		buffer[head] = value;
@@ -54,18 +55,18 @@ namespace ehl
 		return true;
 	}
 
-	template<typename T, isr_circular_buffer_size_t buffer_elements>
+	template <typename T, isr_circular_buffer_size_t buffer_elements>
 	auto isr_circular_buffer<T, buffer_elements>::pop() -> popped_value
 	{
-		if(tail == head)
+		if (tail == head)
 		{
 			return popped_value{};
 		}
 
-		popped_value v{ true, buffer[tail] };
+		popped_value v{true, buffer[tail]};
 		tail = (tail + 1) % buffer_elements;
 		return v;
 	}
-}
+}  // namespace ehl
 
-#endif //EMBEDDEDHELPERLIBRARY_CIRCULAR_BUFFER_H
+#endif  // EMBEDDEDHELPERLIBRARY_CIRCULAR_BUFFER_H

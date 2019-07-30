@@ -33,7 +33,7 @@ namespace ehl
 				return value;
 			}
 		};
-	}
+	}  // namespace detail
 
 	namespace safe_type_limit
 	{
@@ -67,7 +67,7 @@ namespace ehl
 				return min_limit(max_limit(value));
 			}
 		};
-	}
+	}  // namespace safe_type_limit
 
 	template <typename Tag, typename T, typename Limit,
 			  template <typename> class... Operation>
@@ -221,7 +221,7 @@ namespace ehl
 				}
 			};
 		};
-	}
-}
+	}  // namespace safe_type_operation
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_SAFE_TYPE_H

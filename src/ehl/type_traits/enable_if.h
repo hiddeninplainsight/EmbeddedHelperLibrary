@@ -17,6 +17,6 @@ namespace ehl
 
 	template <bool B, class T = void>
 	using enable_if_t = typename enable_if<B, T>::type;
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_ENABLE_IF_H

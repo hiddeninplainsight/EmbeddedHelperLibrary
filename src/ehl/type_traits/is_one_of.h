@@ -25,6 +25,6 @@ namespace ehl
 	struct is_one_of<T, P0, P1toN...> : is_one_of<T, P1toN...>
 	{
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_ONE_OF_H

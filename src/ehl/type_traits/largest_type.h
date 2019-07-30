@@ -3,24 +3,25 @@
 
 namespace ehl
 {
-	template<typename T, typename... Tother>
+	template <typename T, typename... Tother>
 	struct largest_type
 	{
 		static ::std::size_t constexpr size =
-			sizeof(T) > largest_type<Tother...>::size ? sizeof(T)
-													  : largest_type<Tother...>::size;
+			sizeof(T) > largest_type<Tother...>::size
+				? sizeof(T)
+				: largest_type<Tother...>::size;
 		static auto constexpr alignment =
-			alignof(T) > largest_type<Tother...>::alignment ? alignof(T)
-															: largest_type<Tother...>::alignment;
-
+			alignof(T) > largest_type<Tother...>::alignment
+				? alignof(T)
+				: largest_type<Tother...>::alignment;
 	};
 
-	template<typename T>
+	template <typename T>
 	struct largest_type<T>
 	{
 		static ::std::size_t constexpr size = sizeof(T);
 		static auto constexpr alignment = alignof(T);
 	};
-}
+}  // namespace ehl
 
-#endif //EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_LARGEST_TYPE_H
+#endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_LARGEST_TYPE_H

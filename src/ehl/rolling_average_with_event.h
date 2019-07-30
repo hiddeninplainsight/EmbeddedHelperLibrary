@@ -27,6 +27,6 @@ namespace ehl
 			average_update.raise(average);
 		}
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_ROLLING_AVERAGE_WITH_EVENT_H

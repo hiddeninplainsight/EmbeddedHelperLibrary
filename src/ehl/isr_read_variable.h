@@ -5,7 +5,7 @@
 
 namespace ehl
 {
-	template<typename T>
+	template <typename T>
 	class isr_read_variable
 	{
 	private:
@@ -17,13 +17,13 @@ namespace ehl
 		isr_read_variable() = default;
 
 		isr_read_variable(T initial_value)
-			:value_a{as_rvalue(initial_value)}
+			: value_a{as_rvalue(initial_value)}
 		{
 		}
 
 		isr_read_variable& operator=(isr_read_variable const& other)
 		{
-			if(use_a)
+			if (use_a)
 			{
 				value_b = other;
 			}
@@ -37,7 +37,7 @@ namespace ehl
 
 		isr_read_variable<T>& operator=(T new_value)
 		{
-			if(use_a)
+			if (use_a)
 			{
 				value_b = new_value;
 			}
@@ -54,6 +54,6 @@ namespace ehl
 			return use_a ? value_a : value_b;
 		}
 	};
-}
+}  // namespace ehl
 
-#endif //EMBEDDEDHELPERLIBRARY_ISR_READ_VARIABLE_H
+#endif  // EMBEDDEDHELPERLIBRARY_ISR_READ_VARIABLE_H

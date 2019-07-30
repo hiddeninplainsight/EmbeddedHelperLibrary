@@ -19,7 +19,7 @@ namespace ehl
 			{
 				static unsigned int const value = number ? 0 : 1;
 			};
-		}
+		}  // namespace internal
 
 		template <unsigned int number>
 		struct number_of_digits
@@ -27,7 +27,7 @@ namespace ehl
 			static unsigned int const value =
 				internal::number_of_digits<number, number>::value;
 		};
-	}
-}
+	}  // namespace meta
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_META_NUMBER_OF_DIGITS_H

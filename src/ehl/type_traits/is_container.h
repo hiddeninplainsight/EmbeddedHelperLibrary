@@ -50,6 +50,6 @@ namespace ehl
 		: true_type
 	{
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_IS_CONTAINER_H

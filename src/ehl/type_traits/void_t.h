@@ -16,6 +16,6 @@ namespace ehl
 	template <typename...>
 	using void_t = void;
 #endif
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_VOID_T_H

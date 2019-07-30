@@ -15,6 +15,6 @@ namespace ehl
 			return static_cast<T const&>(*this);
 		}
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_CRTP_H

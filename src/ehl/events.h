@@ -10,9 +10,7 @@ namespace ehl
 	public:
 		using parameter_type = TParameter;
 
-		virtual ~event_handler_base()
-		{
-		}
+		virtual ~event_handler_base() {}
 		virtual void invoke(TParameter parameter) const = 0;
 	};
 
@@ -23,9 +21,7 @@ namespace ehl
 	public:
 		using parameter_type = void;
 
-		virtual ~event_handler_base()
-		{
-		}
+		virtual ~event_handler_base() {}
 		virtual void invoke() const = 0;
 	};
 
@@ -179,6 +175,6 @@ namespace ehl
 			(*function)();
 		}
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_EVENTS_H

@@ -8,6 +8,6 @@ namespace ehl
 	{
 		using type = T;
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_TYPE_IS_H

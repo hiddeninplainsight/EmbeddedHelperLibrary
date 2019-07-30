@@ -17,6 +17,6 @@ namespace ehl
 
 	template <bool p, typename T, typename F>
 	using type_if_t = typename type_if<p, T, F>::type;
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_IF_H

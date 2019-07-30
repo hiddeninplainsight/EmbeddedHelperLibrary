@@ -15,6 +15,6 @@ namespace ehl
 	struct has_type_member<T, void_t<typename T::type>> : true_type
 	{
 	};
-}
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_TYPE_TRAITS_HAS_TYPE_MEMBER_H

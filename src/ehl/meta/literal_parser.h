@@ -32,7 +32,7 @@ namespace ehl
 			{
 				static unsigned long long const value = sum;
 			};
-		}
+		}  // namespace internal
 
 		template <char... chars>
 		struct literal_parser
@@ -40,7 +40,7 @@ namespace ehl
 			static unsigned long long const value =
 				internal::literal_parser<0, chars...>::value;
 		};
-	}
-}
+	}  // namespace meta
+}  // namespace ehl
 
 #endif  // EMBEDDEDHELPERLIBRARY_META_LITERAL_PARSER_H
