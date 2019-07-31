@@ -8,6 +8,22 @@ TEST_GROUP_RUNNER(exponential_smoothing)
 	RUN_TEST_CASE(exponential_smoothing, exponential_smoothing_can_be_passed_to_algorithms);
 }
 
+TEST_GROUP_RUNNER(optional)
+{
+	RUN_TEST_CASE(optional, Default_constructed_obejct_is_invalid);
+	RUN_TEST_CASE(optional, Assigning_to_an_optionl_makes_it_valid);
+	RUN_TEST_CASE(optional, The_value_an_optional_was_set_to_can_be_read_back);
+	RUN_TEST_CASE(optional, Assigning_an_lvalue_object_to_an_optional_that_does_not_conatin_a_value_copy_constructs_the_value_into_the_optional);
+	RUN_TEST_CASE(optional, If_an_optional_contains_a_value_it_is_destroyed_when_the_optional_is_destroyed);
+	RUN_TEST_CASE(optional, Assigning_an_lvalue_object_to_an_optional_that_conatins_a_value_copy_assigns_the_value_into_the_optional);
+	RUN_TEST_CASE(optional, Copying_an_optional_with_an_value_set_into_a_uninitialised_optional_copy_constructs_the_value_into_the_new_optional);
+	RUN_TEST_CASE(optional, Copy_constructing_an_optional_that_does_not_contain_a_value_does_not_copy_construct_the_value_into_the_new_optional);
+	RUN_TEST_CASE(optional, Copy_constructing_an_optional_with_a_value);
+	RUN_TEST_CASE(optional, Move_constructing_an_optional_with_a_value);
+	RUN_TEST_CASE(optional, Moving_an_optional_with_a_value_set);
+	RUN_TEST_CASE(optional, Moving_an_optional_with_no_value_set);
+}
+
 TEST_GROUP_RUNNER(isr_circular_buffer_tests)
 {
 	RUN_TEST_CASE(isr_circular_buffer_tests, The_buffer_is_initially_empty);
@@ -129,6 +145,7 @@ TEST_GROUP_RUNNER(events_tests)
 static void RunAllTests()
 {
 	RUN_TEST_GROUP(exponential_smoothing);
+	RUN_TEST_GROUP(optional);
 	RUN_TEST_GROUP(isr_circular_buffer_tests);
 	RUN_TEST_GROUP(fast_exponential_smoothing);
 	RUN_TEST_GROUP(isr_written_variable_tests);
