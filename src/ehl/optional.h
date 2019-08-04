@@ -28,9 +28,18 @@ namespace ehl
 		optional(optional const& other)
 			: valid{other.valid}
 		{
-			if(valid)
+			if (valid)
 			{
 				new(valueData) T{other.value()};
+			}
+		}
+
+		optional(optional&& other)
+			: valid{other.valid}
+		{
+			if (valid)
+			{
+				new(valueData) T{::ehl::as_rvalue(other.value())};
 			}
 		}
 
@@ -51,9 +60,30 @@ namespace ehl
 			destroy_object_if_it_exists();
 		}
 
+		optional& operator=(optional&& other)
+		{
+			if(other.valid)
+			{
+				if(valid)
+				{
+					value() = ::ehl::as_rvalue(other.value());
+				}
+				else
+				{
+					new(valueData) T{::ehl::as_rvalue(other.value())};
+				}
+			}
+			else
+			{
+				destroy_object_if_it_exists();
+			}
+			valid = other.valid;
+			return *this;
+		}
+
 		optional& operator=(T const& other)
 		{
-			if(valid)
+			if (valid)
 			{
 				value() = other;
 			}
