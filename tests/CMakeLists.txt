@@ -5,6 +5,8 @@ add_executable(ehl.tests
 	meta/literal_parser.tests.cpp
 	meta/metafunctions.tests.cpp
 	type_traits/copy_assign_t.tests.cpp
+	type_traits/detection_compiler_generated_methods.test_types.cpp
+	type_traits/detection_compiler_generated_methods.test_types.h
 	type_traits/detection_idiom.tests.cpp
 	type_traits/is_container.tests.cpp
 	type_traits/size_type_t.tests.cpp
