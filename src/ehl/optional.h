@@ -63,11 +63,19 @@ namespace ehl
 			destroy_object_if_it_exists();
 		}
 
-		template<typename U = T, typename = ::ehl::enable_if_t<
+		template<typename U = T>
+		::ehl::enable_if_t<
+			(::ehl::is_move_constructable<U>::value == false) ||
+			(::ehl::is_move_assignable<U>::value == false),
+			optional&>
+		 operator=(optional&& other) = delete;
+
+		template<typename U = T>
+		::ehl::enable_if_t<
 			::ehl::is_move_constructable<U>::value &&
-			::ehl::is_move_assignable<U>::value
-			>>
-		optional& operator=(optional&& other)
+			::ehl::is_move_assignable<U>::value,
+			optional&>
+		operator=(optional&& other)
 		{
 			if(other.valid)
 			{
