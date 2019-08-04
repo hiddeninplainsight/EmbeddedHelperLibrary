@@ -4,6 +4,8 @@
 #include <unity_cpp.h>
 
 #include "recorded_operations.h"
+#include "type_traits/detection_compiler_generated_methods.test_types.h"
+#include <ehl/type_traits/detection_compiler_generated_methods.h>
 
 TEST_GROUP(optional);
 TEST_SETUP(optional)
@@ -214,3 +216,17 @@ TEST(optional, Move_assigning_an_optional_with_a_value_set_with_an_optional_with
 	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
 	TEST_ASSERT_FALSE(anOptional.is_valid());
 }
+
+using namespace ::compiler_generated_method_types;
+
+using optional_no_move_assign = ehl::optional<no_move_assign>;
+using optional_no_move_construct = ehl::optional<no_move_construct>;
+using optional_no_move = ehl::optional<no_move>;
+
+// Test if move constructable from another optional
+// TODO: static_assert(ehl::is_move_constructable<optional_no_move_construct>::value == false, "");
+
+// Test if the optional can be move assigned
+static_assert(ehl::is_move_assignable<optional_no_move_assign>::value == false, "");
+static_assert(ehl::is_move_assignable<optional_no_move_construct>::value == false, "");
+static_assert(ehl::is_move_assignable<optional_no_move>::value == false, "");

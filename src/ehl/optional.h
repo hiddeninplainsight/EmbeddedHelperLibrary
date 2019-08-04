@@ -4,6 +4,9 @@
 #include <new>
 
 #include "rvalue.h"
+#include "type_traits/detection_compiler_generated_methods.h"
+#include "type_traits/detection_idiom.h"
+#include "type_traits/enable_if.h"
 
 namespace ehl
 {
@@ -60,6 +63,10 @@ namespace ehl
 			destroy_object_if_it_exists();
 		}
 
+		template<typename U = T, typename = ::ehl::enable_if_t<
+			::ehl::is_move_constructable<U>::value &&
+			::ehl::is_move_assignable<U>::value
+			>>
 		optional& operator=(optional&& other)
 		{
 			if(other.valid)
