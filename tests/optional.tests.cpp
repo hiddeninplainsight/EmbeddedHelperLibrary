@@ -3,6 +3,8 @@
 #include <ehl/rvalue.h>
 #include <unity_cpp.h>
 
+#include "recorded_operations.h"
+
 TEST_GROUP(optional);
 TEST_SETUP(optional)
 {
@@ -36,86 +38,11 @@ TEST(optional, The_value_an_optional_was_set_to_can_be_read_back)
 	TEST_ASSERT_EQUAL(2, anOptional.value());
 }
 
-namespace
-{
-	class RecordOperations
-	{
-	public:
-		bool defaultConstructed{false};
-		bool copyConstructed{false};
-		bool moveConstructed{false};
-		static int globalCopyConstructCount;
-		static int globalCopyAssignCount;
-		static int globalMoveConstructCount;
-		static int globalMoveAssignCount;
-		bool copyAssigned{false};
-		bool moveAssigned{false};
-		bool* destructed{nullptr};
-
-		RecordOperations()
-			: defaultConstructed{true}
-		{
-		}
-
-		explicit RecordOperations(bool* destructed)
-			: destructed{destructed}
-		{
-		}
-
-		RecordOperations(RecordOperations const& other)
-			: copyConstructed{true}
-			, destructed{other.destructed}
-		{
-			++globalCopyConstructCount;
-		}
-
-		RecordOperations(RecordOperations&& other)
-			: moveConstructed{true}
-			, destructed{other.destructed}
-		{
-			++globalMoveConstructCount;
-		}
-
-		RecordOperations& operator=(RecordOperations const&)
-		{
-			++globalCopyAssignCount;
-			copyAssigned = true;
-			return *this;
-		}
-
-		RecordOperations& operator=(RecordOperations&&)
-		{
-			++globalMoveAssignCount;
-			moveAssigned = true;
-			return *this;
-		}
-
-		~RecordOperations()
-		{
-			if (destructed)
-				*destructed = true;
-		}
-
-		static void ClearCounters()
-		{
-			globalCopyConstructCount = 0;
-			globalCopyAssignCount = 0;
-			globalMoveConstructCount = 0;
-			globalMoveAssignCount = 0;
-		}
-	};
-
-	int RecordOperations::globalCopyConstructCount{0};
-	int RecordOperations::globalCopyAssignCount{0};
-	int RecordOperations::globalMoveConstructCount{0};
-	int RecordOperations::globalMoveAssignCount{0};
-}
-
 TEST(optional, Assigning_an_lvalue_object_to_an_optional_that_does_not_conatin_a_value_copy_constructs_the_value_into_the_optional)
 {
-	RecordOperations object;
+	record_operations object;
 
-	ehl::optional<RecordOperations> anOptional;
+	ehl::optional<record_operations> anOptional;
 	anOptional = object;
 
 	TEST_ASSERT_TRUE(anOptional.value().copyConstructed);
@@ -124,10 +51,10 @@ TEST(optional, Assigning_an_lvalue_object_to_an_optional_that_does_not_conatin_a
 TEST(optional, If_an_optional_contains_a_value_it_is_destroyed_when_the_optional_is_destroyed)
 {
 	bool objectDestructed{false};
-	RecordOperations object{&objectDestructed};
+	record_operations object{&objectDestructed};
 
 	{
-		ehl::optional<RecordOperations> anOptional;
+		ehl::optional<record_operations> anOptional;
 		anOptional = object;
 		TEST_ASSERT_FALSE(objectDestructed);
 	}
@@ -137,10 +64,10 @@ TEST(optional, If_an_optional_contains_a_value_it_is_destroyed_when_the_optional
 
 TEST(optional, Assigning_an_lvalue_object_to_an_optional_that_conatins_a_value_copy_assigns_the_value_into_the_optional)
 {
-	RecordOperations object1;
-	RecordOperations object2;
+	record_operations object1;
+	record_operations object2;
 
-	ehl::optional<RecordOperations> anOptional;
+	ehl::optional<record_operations> anOptional;
 	anOptional = object1;
 	TEST_ASSERT_FALSE(anOptional.value().copyAssigned);
 
@@ -151,9 +78,9 @@ TEST(optional, Assigning_an_lvalue_object_to_an_optional_that_conatins_a_value_c
 
 TEST(optional, Copying_an_optional_with_an_value_set_into_a_uninitialised_optional_copy_constructs_the_value_into_the_new_optional)
 {
-	RecordOperations object;
+	record_operations object;
 
-	ehl::optional<RecordOperations> optional1;
+	ehl::optional<record_operations> optional1;
 	optional1 = object;
 	// The value will be copy constructed by the previous assignment, clear
 	// this as a default copy constructor will memory copy the valueData array
@@ -161,7 +88,7 @@ TEST(optional, Copying_an_optional_with_an_value_set_into_a_uninitialised_option
 	// it hasn't been copy constructed
 	optional1.value().copyConstructed = false;
 
-	ehl::optional<RecordOperations> optional2{optional1};
+	ehl::optional<record_operations> optional2{optional1};
 
 	TEST_ASSERT_TRUE(optional2.is_valid());
 	TEST_ASSERT_TRUE(optional2.value().copyConstructed);
@@ -169,23 +96,23 @@ TEST(optional, Copying_an_optional_with_an_value_set_into_a_uninitialised_option
 
 TEST(optional, Copy_constructing_an_optional_that_does_not_contain_a_value_does_not_copy_construct_the_value_into_the_new_optional)
 {
-	RecordOperations object;
+	record_operations object;
 
-	ehl::optional<RecordOperations> optional1;
+	ehl::optional<record_operations> optional1;
 
-	RecordOperations::globalCopyConstructCount = 0;
+	record_operations::globalCopyConstructCount = 0;
 
-	ehl::optional<RecordOperations> optional2{optional1};
+	ehl::optional<record_operations> optional2{optional1};
 
 	TEST_ASSERT_FALSE(optional2.is_valid());
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
 }
 
 TEST(optional, Copy_constructing_an_optional_with_a_value)
 {
-	RecordOperations object;
+	record_operations object;
 
-	ehl::optional<RecordOperations> anOptional{object};
+	ehl::optional<record_operations> anOptional{object};
 
 	TEST_ASSERT_TRUE(anOptional.is_valid());
 	TEST_ASSERT_TRUE(anOptional.value().copyConstructed);
@@ -193,7 +120,7 @@ TEST(optional, Copy_constructing_an_optional_with_a_value)
 
 TEST(optional, Move_constructing_an_optional_with_a_value)
 {
-	ehl::optional<RecordOperations> anOptional{RecordOperations{}};
+	ehl::optional<record_operations> anOptional{record_operations{}};
 
 	TEST_ASSERT_TRUE(anOptional.is_valid());
 	TEST_ASSERT_FALSE(anOptional.value().copyConstructed);
@@ -202,10 +129,10 @@ TEST(optional, Move_constructing_an_optional_with_a_value)
 
 TEST(optional, Move_constructing_an_optional_with_an_optional_with_a_value_set)
 {
-	RecordOperations object;
-	ehl::optional<RecordOperations> anOptionalWithAValue{object};
+	record_operations object;
+	ehl::optional<record_operations> anOptionalWithAValue{object};
 
-	ehl::optional<RecordOperations> anOptional{ehl::as_rvalue(anOptionalWithAValue)};
+	ehl::optional<record_operations> anOptional{ehl::as_rvalue(anOptionalWithAValue)};
 
 	TEST_ASSERT_TRUE(anOptional.is_valid());
 	TEST_ASSERT_TRUE(anOptional.value().moveConstructed);
@@ -213,77 +140,77 @@ TEST(optional, Move_constructing_an_optional_with_an_optional_with_a_value_set)
 
 TEST(optional, Move_constructing_an_optional_with_an_optional_with_no_value_set)
 {
-	ehl::optional<RecordOperations> anOptionalWithNoValue;
+	ehl::optional<record_operations> anOptionalWithNoValue;
 
-	RecordOperations::globalMoveConstructCount = 0;
-	ehl::optional<RecordOperations> anOptional{ehl::as_rvalue(anOptionalWithNoValue)};
+	record_operations::globalMoveConstructCount = 0;
+	ehl::optional<record_operations> anOptional{ehl::as_rvalue(anOptionalWithNoValue)};
 
 	TEST_ASSERT_FALSE(anOptional.is_valid());
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalMoveConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
 }
 
 TEST(optional, Move_assigning_an_optional_with_no_value_set_with_an_optional_with_no_value_set)
 {
-	ehl::optional<RecordOperations> anOptionalWithNoValue;
-	ehl::optional<RecordOperations> anOptional;
+	ehl::optional<record_operations> anOptionalWithNoValue;
+	ehl::optional<record_operations> anOptional;
 
-	RecordOperations::ClearCounters();
+	record_operations::ClearCounters();
 	anOptional = ehl::as_rvalue(anOptionalWithNoValue);
 
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyAssignCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyConstructCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalMoveAssignCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalMoveConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
 	TEST_ASSERT_FALSE(anOptional.is_valid());
 }
 
 TEST(optional, Move_assigning_an_optional_with_no_value_set_with_an_optional_with_a_value_set)
 {
-	RecordOperations value;
-	ehl::optional<RecordOperations> anOptionalWithAValue{value};
-	ehl::optional<RecordOperations> anOptional;
+	record_operations value;
+	ehl::optional<record_operations> anOptionalWithAValue{value};
+	ehl::optional<record_operations> anOptional;
 
-	RecordOperations::ClearCounters();
+	record_operations::ClearCounters();
 	anOptional = ehl::as_rvalue(anOptionalWithAValue);
 
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyAssignCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyConstructCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalMoveAssignCount);
-	TEST_ASSERT_EQUAL(1, RecordOperations::globalMoveConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(1, record_operations::globalMoveConstructCount);
 	TEST_ASSERT_TRUE(anOptional.is_valid());
 }
 
 TEST(optional, Move_assigning_an_optional_with_a_value_set_with_an_optional_with_a_value_set)
 {
-	RecordOperations value;
-	ehl::optional<RecordOperations> anOptionalWithAValue{value};
-	RecordOperations value2;
-	ehl::optional<RecordOperations> anOptional{value2};
+	record_operations value;
+	ehl::optional<record_operations> anOptionalWithAValue{value};
+	record_operations value2;
+	ehl::optional<record_operations> anOptional{value2};
 
-	RecordOperations::ClearCounters();
+	record_operations::ClearCounters();
 	anOptional = ehl::as_rvalue(anOptionalWithAValue);
 
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyAssignCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyConstructCount);
-	TEST_ASSERT_EQUAL(1, RecordOperations::globalMoveAssignCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalMoveConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(1, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
 	TEST_ASSERT_TRUE(anOptional.is_valid());
 }
 
 TEST(optional, Move_assigning_an_optional_with_a_value_set_with_an_optional_with_no_value_set)
 {
-	ehl::optional<RecordOperations> anOptionalWithNoValue;
+	ehl::optional<record_operations> anOptionalWithNoValue;
 	bool valueDestroyed{false};
-	RecordOperations value{&valueDestroyed};
-	ehl::optional<RecordOperations> anOptional{value};
+	record_operations value{&valueDestroyed};
+	ehl::optional<record_operations> anOptional{value};
 
-	RecordOperations::ClearCounters();
+	record_operations::ClearCounters();
 	anOptional = ehl::as_rvalue(anOptionalWithNoValue);
 
 	TEST_ASSERT_TRUE(valueDestroyed);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyAssignCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalCopyConstructCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalMoveAssignCount);
-	TEST_ASSERT_EQUAL(0, RecordOperations::globalMoveConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
 	TEST_ASSERT_FALSE(anOptional.is_valid());
 }

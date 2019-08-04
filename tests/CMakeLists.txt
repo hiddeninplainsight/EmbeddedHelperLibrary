@@ -17,6 +17,8 @@ add_executable(ehl.tests
 	isr_written_variable.tests.cpp
 	linear_interpolator.tests.cpp
 	optional.tests.cpp
+	recorded_operations.cpp
+	recorded_operations.h
 	rolling_average.tests.cpp
 	rolling_average_with_events.tests.cpp
 	safe_type.tests.cpp
