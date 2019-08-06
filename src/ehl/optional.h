@@ -10,7 +10,7 @@
 
 namespace ehl
 {
-	template<typename T>
+	template <typename T>
 	class optional
 	{
 	private:
@@ -33,7 +33,7 @@ namespace ehl
 		{
 			if (valid)
 			{
-				new(valueData) T{other.value()};
+				new (valueData) T{other.value()};
 			}
 		}
 
@@ -42,20 +42,20 @@ namespace ehl
 		{
 			if (valid)
 			{
-				new(valueData) T{::ehl::as_rvalue(other.value())};
+				new (valueData) T{::ehl::as_rvalue(other.value())};
 			}
 		}
 
 		optional(T const& object)
 			: valid{true}
 		{
-			new(valueData) T{object};
+			new (valueData) T{object};
 		}
 
 		optional(T&& object)
 			: valid{true}
 		{
-			new(valueData) T{::ehl::as_rvalue(object)};
+			new (valueData) T{::ehl::as_rvalue(object)};
 		}
 
 		~optional()
@@ -63,29 +63,33 @@ namespace ehl
 			destroy_object_if_it_exists();
 		}
 
-		template<typename U = T>
+		// clang-format off
+		template <typename U = T>
 		::ehl::enable_if_t<
 			(::ehl::is_move_constructable<U>::value == false) ||
 			(::ehl::is_move_assignable<U>::value == false),
 			optional&>
-		 operator=(optional&& other) = delete;
+		operator=(optional&& other) = delete;
+		// clang-format on
 
-		template<typename U = T>
+		// clang-format off
+		template <typename U = T>
 		::ehl::enable_if_t<
 			::ehl::is_move_constructable<U>::value &&
 			::ehl::is_move_assignable<U>::value,
 			optional&>
 		operator=(optional&& other)
+		// clang-format on
 		{
-			if(other.valid)
+			if (other.valid)
 			{
-				if(valid)
+				if (valid)
 				{
 					value() = ::ehl::as_rvalue(other.value());
 				}
 				else
 				{
-					new(valueData) T{::ehl::as_rvalue(other.value())};
+					new (valueData) T{::ehl::as_rvalue(other.value())};
 				}
 			}
 			else
@@ -104,7 +108,7 @@ namespace ehl
 			}
 			else
 			{
-				new(valueData) T{other};
+				new (valueData) T{other};
 				valid = true;
 			}
 			return *this;
@@ -125,6 +129,6 @@ namespace ehl
 			return *reinterpret_cast<T const*>(valueData);
 		}
 	};
-}
+}  // namespace ehl
 
-#endif //EMBEDDEDHELPERLIBRARY_OPTIONAL_H
+#endif  // EMBEDDEDHELPERLIBRARY_OPTIONAL_H

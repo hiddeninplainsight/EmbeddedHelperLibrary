@@ -51,5 +51,5 @@ namespace compiler_generated_method_types
 		no_move& operator=(no_move const&) = default;
 		no_move& operator=(no_move&&) = delete;
 	};
-}
-#endif //DETECTION_COMPILER_GENERATED_METHODS_TEST_TYPES_H
+}  // namespace compiler_generated_method_types
+#endif  // DETECTION_COMPILER_GENERATED_METHODS_TEST_TYPES_H
