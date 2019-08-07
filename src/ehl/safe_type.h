@@ -136,6 +136,26 @@ namespace ehl
 		};
 
 		template <typename T>
+		struct multiply : crtp<T, subtract<T>>
+		{
+			T operator*(T const& right) const
+			{
+				return T(this->derived_object().raw_value() *
+						 right.raw_value());
+			}
+		};
+
+		template <typename T>
+		struct divide : crtp<T, subtract<T>>
+		{
+			T operator/(T const& right) const
+			{
+				return T(this->derived_object().raw_value() /
+						 right.raw_value());
+			}
+		};
+
+		template <typename T>
 		struct preincrement : crtp<T, preincrement<T>>
 		{
 			T& operator++()

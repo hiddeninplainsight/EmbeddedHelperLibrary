@@ -75,7 +75,6 @@ TEST(safe_type, can_assign_to_lvalue_but_not_to_rvalue_of_safe_types)
 	static_assert(!ehl::is_detected<invalid_add_operation, safe>::value, "'a + b = c' incorrectly allowed for safe_type");
 }
 
-
 TEST(safe_type, subtracting_safe_types)
 {
 	using safe = ehl::safe_type<struct int_tag, int, sto::subtract>;
@@ -85,6 +84,28 @@ TEST(safe_type, subtracting_safe_types)
 
 	safe result = a - b;
 	TEST_ASSERT_EQUAL_INT(1, result.raw_value());
+}
+
+TEST(safe_type, multiplying_safe_types)
+{
+	using safe = ehl::safe_type<struct int_tag, int, sto::multiply>;
+
+	safe a{4};
+	safe b{3};
+
+	safe result = a * b;
+	TEST_ASSERT_EQUAL_INT(12, result.raw_value());
+}
+
+TEST(safe_type, dividing_safe_types)
+{
+	using safe = ehl::safe_type<struct int_tag, int, sto::divide>;
+
+	safe a{12};
+	safe b{3};
+
+	safe result = a / b;
+	TEST_ASSERT_EQUAL_INT(4, result.raw_value());
 }
 
 TEST(safe_type, comparing_safe_types)

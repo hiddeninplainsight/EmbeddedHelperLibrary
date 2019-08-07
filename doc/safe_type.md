@@ -80,6 +80,8 @@ Operations add behaviors to a safe type.
 <tr><td>operation</td><td>binary operator</td></tr>
 <tr><td><code>ehl::safe_type_operation::add</code></td><td><code>+</code></td></tr>
 <tr><td><code>ehl::safe_type_operation::subtract</code></td><td><code>-</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::multiply</code></td><td><code>*</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::divide</code></td><td><code>/</code></td></tr>
 </table>
 
 #### Example

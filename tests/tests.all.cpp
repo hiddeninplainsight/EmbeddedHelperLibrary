@@ -64,6 +64,8 @@ TEST_GROUP_RUNNER(safe_type)
 	RUN_TEST_CASE(safe_type, can_copy_construct_an_lvalue);
 	RUN_TEST_CASE(safe_type, can_assign_to_lvalue_but_not_to_rvalue_of_safe_types);
 	RUN_TEST_CASE(safe_type, subtracting_safe_types);
+	RUN_TEST_CASE(safe_type, multiplying_safe_types);
+	RUN_TEST_CASE(safe_type, dividing_safe_types);
 	RUN_TEST_CASE(safe_type, comparing_safe_types);
 	RUN_TEST_CASE(safe_type, implicit_converting_safe_types);
 	RUN_TEST_CASE(safe_type, adding_multiple_operations);
