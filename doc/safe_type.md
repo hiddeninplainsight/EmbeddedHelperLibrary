@@ -74,11 +74,15 @@ underlying type and then instantiates an instance of `id_t` called
 
 Operations add behaviors to a safe type.
 
-### `ehl::safe_type_operation::add`
+### Binary operations
 
-Adds the binary `+` operator for the type.
+<table>
+<tr><td>operation</td><td>binary operator</td></tr>
+<tr><td><code>ehl::safe_type_operation::add</code></td><td><code>+</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::subtract</code></td><td><code>-</code></td></tr>
+</table>
 
-#### Examples
+#### Example
 
 ```
 #include <ehl/safe_type.h>
@@ -92,29 +96,14 @@ addable_t b{15};
 addable_t c = a + b;
 ```
 
-### `ehl::safe_type_operation::subtract`
+### Unary operations
 
-Adds the binary `-` operator for the type.
+<table>
+<tr><td>operation</td><td>unary operator</td></tr>
+<tr><td><code>ehl::safe_type_operation::preincrement</code></td><td><code>++p</code></td></tr>
+</table>
 
-#### Examples
-
-```
-#include <ehl/safe_type.h>
-
-using subtractable_t = ehl::safe_type<struct subtractable_t_tag, unsigned int,
-    ehl::safe_type_operation::subtract>;
-
-subtractable_t a{10};
-subtractable_t b{15};
-
-subtractable_t c = a - b;
-```
-
-### `ehl::safe_type_operation::preincrement`
-
-Adds the unary pre-incrment `++` operator for the type.
-
-#### Examples
+#### Example
 
 ```
 #include <ehl/safe_type.h>
@@ -127,11 +116,19 @@ preincrement_t a{10};
 ++a;
 ```
 
-### `ehl::safe_type_operation::equal`
+### Comparison operations
 
-Adds the binary `==` operator for the type.
+<table>
+<tr><td>operation</td><td>comparison operator</td></tr>
+<tr><td><code>ehl::safe_type_operation::equal</code></td><td><code>==</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::not_equal</code></td><td><code>!=</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::less_than</code></td><td><code>&lt;</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::less_than_or_equal</code></td><td><code>&lt;=</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::greater_than</code></td><td><code>&gt;</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::greater_than_or_equal</code></td><td><code>&gt;=</code></td></tr>
+</table>
 
-#### Examples
+#### Example
 
 ```
 #include <ehl/safe_type.h>
@@ -148,114 +145,9 @@ if(a == b)
 }
 ```
 
-### `ehl::safe_type_operation::not_equal`
+### Combined comparison operations
 
-Adds the binary `!=` operator for the type.
-
-#### Examples
-
-```
-#include <ehl/safe_type.h>
-
-using not_equal_t = ehl::safe_type<struct not_equal_t_tag, unsigned int,
-    ehl::safe_type_operation::not_equal>;
-
-not_equal_t a{10};
-not_equal_t b{15};
-
-if(a != b)
-{
-    // ...
-}
-```
-
-### `ehl::safe_type_operation::less_than`
-
-Adds the binary `<` operator for the type.
-
-#### Examples
-
-```
-#include <ehl/safe_type.h>
-
-using less_than_t = ehl::safe_type<struct less_than_t_tag, unsigned int,
-    ehl::safe_type_operation::less_than>;
-
-less_than_t a{10};
-less_than_t b{15};
-
-if(a < b)
-{
-    // ...
-}
-```
-
-### `ehl::safe_type_operation::less_than_or_equal`
-
-Adds the binary `<=` operator for the type.
-
-#### Examples
-
-```
-#include <ehl/safe_type.h>
-
-using less_than_or_equal_t = ehl::safe_type<struct less_than_or_equal_t_tag, unsigned int,
-    ehl::safe_type_operation::less_than_or_equal>;
-
-less_than_or_equal_t a{10};
-less_than_or_equal_t b{15};
-
-if(a <= b)
-{
-    // ...
-}
-```
-
-### `ehl::safe_type_operation::greater_than`
-
-Adds the binary `>` operator for the type.
-
-#### Examples
-
-```
-#include <ehl/safe_type.h>
-
-using greater_than_t = ehl::safe_type<struct greater_than_t_tag, unsigned int,
-    ehl::safe_type_operation::greater_than>;
-
-greater_than_t a{10};
-greater_than_t b{15};
-
-if(a > b)
-{
-    // ...
-}
-```
-
-### `ehl::safe_type_operation::greater_than_or_equal`
-
-Adds the binary `>=` operator for the type.
-
-#### Examples
-
-```
-#include <ehl/safe_type.h>
-
-using greater_than_or_equal_t = ehl::safe_type<struct greater_than_or_equal_t_tag, unsigned int,
-    ehl::safe_type_operation::greater_than>;
-
-greater_than_or_equal_t a{10};
-greater_than_or_equal_t b{15};
-
-if(a >= b)
-{
-    // ...
-}
-```
-
-### `ehl::safe_type_operation::compare`
-
-Adds the following safe type operators:
+`ehl::safe_type_operation::compare` adds the following safe type operators:
 * `ehl::safe_type_operation::equal`
 * `ehl::safe_type_operation::notequal`
 * `ehl::safe_type_operation::less_than`
@@ -263,11 +155,11 @@ Adds the following safe type operators:
 * `ehl::safe_type_operation::greater_than`
 * `ehl::safe_type_operation::greater_than_or_equal`
 
-### `ehl::safe_type_operation::implicitly_convert_to<typename U>::operation`
+### Conversion operation
 
-Adds the `operator U()` method to the type.
+`ehl::safe_type_operation::implicitly_convert_to<typename U>::operation` adds the `operator U()` method to the type.
 
-#### Examples
+#### Example
 
 ```
 #include <ehl/safe_type.h>
