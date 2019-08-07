@@ -28,7 +28,6 @@ Template parameters:
 using id_t = ehl::safe_type<struct id_t_tag, unsigned int>;
 
 id_t myIdentification{10};
-
 ```
 
 This code creates a type called `id_t` using an `unsigned int` as its
@@ -63,7 +62,6 @@ class id_t : public ehl::extendable_safe_type<id_t, unsigned int>
 };
 
 id_t myIdentification{10};
-
 ```
 
 This code creates a type called `id_t` using an `unsigned int` as its
@@ -89,10 +87,9 @@ using addable_t = ehl::safe_type<struct addable_t_tag, unsigned int,
     ehl::safe_type_operation::add>;
 
 addable_t a{10};
-addable_t a{15};
+addable_t b{15};
 
 addable_t c = a + b;
-
 ```
 
 ### `ehl::safe_type_operation::subtract`
@@ -108,8 +105,176 @@ using subtractable_t = ehl::safe_type<struct subtractable_t_tag, unsigned int,
     ehl::safe_type_operation::subtract>;
 
 subtractable_t a{10};
-subtractable_t a{15};
+subtractable_t b{15};
 
 subtractable_t c = a - b;
+```
 
+### `ehl::safe_type_operation::preincrement`
+
+Adds the unary pre-incrment `++` operator for the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using preincrement_t = ehl::safe_type<struct preincrement_t_tag, unsigned int,
+    ehl::safe_type_operation::preincrement>;
+
+preincrement_t a{10};
+
+++a;
+```
+
+### `ehl::safe_type_operation::equal`
+
+Adds the binary `==` operator for the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using equal_t = ehl::safe_type<struct equal_t_tag, unsigned int,
+    ehl::safe_type_operation::equal>;
+
+equal_t a{10};
+equal_t b{15};
+
+if(a == b)
+{
+    // ...
+}
+```
+
+### `ehl::safe_type_operation::not_equal`
+
+Adds the binary `!=` operator for the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using not_equal_t = ehl::safe_type<struct not_equal_t_tag, unsigned int,
+    ehl::safe_type_operation::not_equal>;
+
+not_equal_t a{10};
+not_equal_t b{15};
+
+if(a != b)
+{
+    // ...
+}
+```
+
+### `ehl::safe_type_operation::less_than`
+
+Adds the binary `<` operator for the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using less_than_t = ehl::safe_type<struct less_than_t_tag, unsigned int,
+    ehl::safe_type_operation::less_than>;
+
+less_than_t a{10};
+less_than_t b{15};
+
+if(a < b)
+{
+    // ...
+}
+```
+
+### `ehl::safe_type_operation::less_than_or_equal`
+
+Adds the binary `<=` operator for the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using less_than_or_equal_t = ehl::safe_type<struct less_than_or_equal_t_tag, unsigned int,
+    ehl::safe_type_operation::less_than_or_equal>;
+
+less_than_or_equal_t a{10};
+less_than_or_equal_t b{15};
+
+if(a <= b)
+{
+    // ...
+}
+```
+
+### `ehl::safe_type_operation::greater_than`
+
+Adds the binary `>` operator for the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using greater_than_t = ehl::safe_type<struct greater_than_t_tag, unsigned int,
+    ehl::safe_type_operation::greater_than>;
+
+greater_than_t a{10};
+greater_than_t b{15};
+
+if(a > b)
+{
+    // ...
+}
+```
+
+### `ehl::safe_type_operation::greater_than_or_equal`
+
+Adds the binary `>=` operator for the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using greater_than_or_equal_t = ehl::safe_type<struct greater_than_or_equal_t_tag, unsigned int,
+    ehl::safe_type_operation::greater_than>;
+
+greater_than_or_equal_t a{10};
+greater_than_or_equal_t b{15};
+
+if(a >= b)
+{
+    // ...
+}
+```
+
+### `ehl::safe_type_operation::compare`
+
+Adds the following safe type operators:
+* `ehl::safe_type_operation::equal`
+* `ehl::safe_type_operation::notequal`
+* `ehl::safe_type_operation::less_than`
+* `ehl::safe_type_operation::less_than_or_equal`
+* `ehl::safe_type_operation::greater_than`
+* `ehl::safe_type_operation::greater_than_or_equal`
+
+### `ehl::safe_type_operation::implicitly_convert_to<typename U>::operation`
+
+Adds the `operator U()` method to the type.
+
+#### Examples
+
+```
+#include <ehl/safe_type.h>
+
+using convertable_to_t = ehl::safe_type<struct convertable_to_t_tag, unsigned int,
+    ehl::safe_type_operation::implicitly_convert_to<long>::operation>;
+
+convertable_to_t a{10};
+long b = a;
 ```
