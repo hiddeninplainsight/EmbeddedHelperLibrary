@@ -35,6 +35,16 @@ TEST(safe_type, pre_increment_safe_types)
 	TEST_ASSERT_EQUAL_INT(2, a.raw_value());
 }
 
+TEST(safe_type, post_increment_safe_types)
+{
+	using safe = ehl::safe_type<struct int_tag, int, sto::postincrement>;
+
+	safe a{1};
+	a++;
+
+	TEST_ASSERT_EQUAL_INT(2, a.raw_value());
+}
+
 TEST(safe_type, adding_safe_types)
 {
 	using safe = ehl::safe_type<struct int_tag, int, sto::add>;

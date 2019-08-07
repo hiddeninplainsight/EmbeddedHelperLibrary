@@ -103,6 +103,7 @@ addable_t c = a + b;
 <table>
 <tr><td>operation</td><td>unary operator</td></tr>
 <tr><td><code>ehl::safe_type_operation::preincrement</code></td><td><code>++p</code></td></tr>
+<tr><td><code>ehl::safe_type_operation::postincrement</code></td><td><code>p++</code></td></tr>
 </table>
 
 #### Example

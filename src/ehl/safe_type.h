@@ -166,6 +166,16 @@ namespace ehl
 		};
 
 		template <typename T>
+		struct postincrement : crtp<T, preincrement<T>>
+		{
+			T& operator++(int)
+			{
+				this->derived_object().raw_value()++;
+				return this->derived_object();
+			}
+		};
+
+		template <typename T>
 		struct equal : crtp<T, equal<T>>
 		{
 			bool operator==(T const& other) const
