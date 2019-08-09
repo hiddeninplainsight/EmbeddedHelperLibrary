@@ -63,6 +63,27 @@ namespace ehl
 			destroy_object_if_it_exists();
 		}
 
+		optional& operator=(optional const& other)
+		{
+			if(other.valid)
+			{
+				if(valid)
+				{
+					value() = other.value();
+				}
+				else
+				{
+					new(valueData) T{other.value()};
+				}
+			}
+			else
+			{
+				destroy_object_if_it_exists();
+			}
+			valid = other.valid;
+			return *this;
+		}
+
 		// clang-format off
 		template <typename U = T>
 		::ehl::enable_if_t<

@@ -217,16 +217,93 @@ TEST(optional, Move_assigning_an_optional_with_a_value_set_with_an_optional_with
 	TEST_ASSERT_FALSE(anOptional.is_valid());
 }
 
+TEST(optional, Copy_assigning_an_optional_with_no_value_set_with_an_optional_with_no_value_set)
+{
+	ehl::optional<record_operations> anOptionalWithNoValue;
+	ehl::optional<record_operations> anOptional;
+
+	record_operations::ClearCounters();
+	anOptional = anOptionalWithNoValue;
+
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
+	TEST_ASSERT_FALSE(anOptional.is_valid());
+}
+
+TEST(optional, Copy_assigning_an_optional_with_no_value_set_with_an_optional_with_a_value_set)
+{
+	record_operations value;
+	ehl::optional<record_operations> anOptionalWithAValue{value};
+	ehl::optional<record_operations> anOptional;
+
+	record_operations::ClearCounters();
+	anOptional = anOptionalWithAValue;
+
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(1, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
+	TEST_ASSERT_TRUE(anOptional.is_valid());
+}
+
+TEST(optional, Copy_assigning_an_optional_with_a_value_set_with_an_optional_with_a_value_set)
+{
+	record_operations value;
+	ehl::optional<record_operations> anOptionalWithAValue{value};
+	record_operations value2;
+	ehl::optional<record_operations> anOptional{value2};
+
+	record_operations::ClearCounters();
+	anOptional = anOptionalWithAValue;
+
+	TEST_ASSERT_EQUAL(1, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
+	TEST_ASSERT_TRUE(anOptional.is_valid());
+}
+
+TEST(optional, Copy_assigning_an_optional_with_a_value_set_with_an_optional_with_no_value_set)
+{
+	ehl::optional<record_operations> anOptionalWithNoValue;
+	bool valueDestroyed{false};
+	record_operations value{&valueDestroyed};
+	ehl::optional<record_operations> anOptional{value};
+
+	record_operations::ClearCounters();
+	anOptional = anOptionalWithNoValue;
+
+	TEST_ASSERT_TRUE(valueDestroyed);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalCopyConstructCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveAssignCount);
+	TEST_ASSERT_EQUAL(0, record_operations::globalMoveConstructCount);
+	TEST_ASSERT_FALSE(anOptional.is_valid());
+}
+
 using namespace ::compiler_generated_method_types;
+
+static_assert(ehl::is_copy_constructible<record_operations>::value, "");
+static_assert(ehl::is_copy_assignable<record_operations>::value, "");
 
 using optional_no_move_assign = ehl::optional<no_move_assign>;
 using optional_no_move_construct = ehl::optional<no_move_construct>;
 using optional_no_move = ehl::optional<no_move>;
 
 // Test if move constructable from another optional
-// TODO: static_assert(ehl::is_move_constructable<optional_no_move_construct>::value == false, "");
+// TODO: static_assert(ehl::is_move_constructible<optional_no_move_construct>::value == false, "");
 
 // Test if the optional can be move assigned
 static_assert(ehl::is_move_assignable<optional_no_move_assign>::value == false, "");
 static_assert(ehl::is_move_assignable<optional_no_move_construct>::value == false, "");
 static_assert(ehl::is_move_assignable<optional_no_move>::value == false, "");
+
+using optional_no_copy_assign = ehl::optional<no_copy_assign>;
+using optional_no_copy_construct = ehl::optional<no_copy_construct>;
+using optional_no_copy = ehl::optional<no_copy>;
+
+//static_assert(ehl::is_copy_assignable<optional_no_copy_assign>::value == false, "");
+//static_assert(ehl::is_copy_assignable<optional_no_copy_construct>::value == false, "");
+//static_assert(ehl::is_copy_assignable<optional_no_copy>::value == false, "");
