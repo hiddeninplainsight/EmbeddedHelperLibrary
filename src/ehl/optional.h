@@ -66,7 +66,7 @@ namespace ehl
 		// clang-format off
 		template <typename U = T>
 		::ehl::enable_if_t<
-			(::ehl::is_move_constructable<U>::value == false) ||
+			(::ehl::is_move_constructible<U>::value == false) ||
 			(::ehl::is_move_assignable<U>::value == false),
 			optional&>
 		operator=(optional&& other) = delete;
@@ -75,7 +75,7 @@ namespace ehl
 		// clang-format off
 		template <typename U = T>
 		::ehl::enable_if_t<
-			::ehl::is_move_constructable<U>::value &&
+			::ehl::is_move_constructible<U>::value &&
 			::ehl::is_move_assignable<U>::value,
 			optional&>
 		operator=(optional&& other)

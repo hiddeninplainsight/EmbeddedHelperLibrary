@@ -28,6 +28,14 @@ namespace compiler_generated_method_types
 		no_copy_assign& operator=(no_copy_assign&&) = default;
 	};
 
+	struct no_copy
+	{
+		no_copy(no_copy const&) = delete;
+		no_copy(no_copy&&) = default;
+		no_copy& operator=(no_copy const&) = delete;
+		no_copy& operator=(no_copy&&) = default;
+	};
+
 	struct no_move_construct
 	{
 		no_move_construct(no_move_construct const&) = default;

@@ -3,6 +3,7 @@
 
 #include "declval.h"
 #include "detection_idiom.h"
+#include "void_t.h"
 
 namespace ehl
 {
@@ -11,13 +12,19 @@ namespace ehl
 	using default_construct_t = decltype(T());
 
 	template <class T>
-	using is_default_constructable = is_detected<default_construct_t, T>;
+	using is_default_constructible = is_detected<default_construct_t, T>;
+
+	template <class T>
+	using copy_construct_t = decltype(T{declval<T const&>()});
+
+	template <class T>
+	using is_copy_constructible = is_detected<copy_construct_t, T>;
 
 	template <class T>
 	using move_construct_t = decltype(T{declval<T&&>()});
 
 	template <class T>
-	using is_move_constructable = is_detected<move_construct_t, T>;
+	using is_move_constructible = is_detected<move_construct_t, T>;
 
 	// Assignment
 	template <class T>
