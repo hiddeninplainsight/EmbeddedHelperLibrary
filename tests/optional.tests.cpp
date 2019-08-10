@@ -288,22 +288,27 @@ using namespace ::compiler_generated_method_types;
 static_assert(ehl::is_copy_constructible<record_operations>::value, "");
 static_assert(ehl::is_copy_assignable<record_operations>::value, "");
 
-using optional_no_move_assign = ehl::optional<no_move_assign>;
+using optional_all_allowed = ::ehl::optional<everything_allowed>;
+using optional_no_copy_construct = ehl::optional<no_copy_construct>;
+using optional_no_copy_assign = ehl::optional<no_copy_assign>;
+using optional_no_copy = ehl::optional<no_copy>;
 using optional_no_move_construct = ehl::optional<no_move_construct>;
+using optional_no_move_assign = ehl::optional<no_move_assign>;
 using optional_no_move = ehl::optional<no_move>;
 
-// Test if move constructable from another optional
-// TODO: static_assert(ehl::is_move_constructible<optional_no_move_construct>::value == false, "");
+template<typename T, bool copyConstruct, bool copyAssign, bool moveConstruct, bool moveAssign>
+struct HasConstructAssign
+{
+	static_assert(::ehl::is_copy_constructible<T>::value == copyConstruct, "");
+	static_assert(::ehl::is_copy_assignable<T>::value == copyAssign, "");
+	static_assert(::ehl::is_move_constructible<T>::value == moveConstruct, "");
+	static_assert(::ehl::is_move_assignable<T>::value == moveAssign, "");
+};
 
-// Test if the optional can be move assigned
-static_assert(ehl::is_move_assignable<optional_no_move_assign>::value == false, "");
-static_assert(ehl::is_move_assignable<optional_no_move_construct>::value == false, "");
-static_assert(ehl::is_move_assignable<optional_no_move>::value == false, "");
-
-using optional_no_copy_assign = ehl::optional<no_copy_assign>;
-using optional_no_copy_construct = ehl::optional<no_copy_construct>;
-using optional_no_copy = ehl::optional<no_copy>;
-
-//static_assert(ehl::is_copy_assignable<optional_no_copy_assign>::value == false, "");
-//static_assert(ehl::is_copy_assignable<optional_no_copy_construct>::value == false, "");
-//static_assert(ehl::is_copy_assignable<optional_no_copy>::value == false, "");
+HasConstructAssign<optional_all_allowed, true, true, true, true> testOptionalAll;
+HasConstructAssign<optional_no_copy_construct, false, false, true, true> testOptionalNoCopyConstruct;
+HasConstructAssign<optional_no_copy_assign, false, false, true, true> testOptionalNoCopyAssign;
+HasConstructAssign<optional_no_copy, false, false, true, true> testOptionalNoCopy;
+HasConstructAssign<optional_no_move_construct, true, true, false, false> testOptionalNoMoveConstruct;
+HasConstructAssign<optional_no_move_assign, true, true, false, false> testOptionalNoMoveAssign;
+HasConstructAssign<optional_no_move, true, true, false, false> testOptionalNoMove;

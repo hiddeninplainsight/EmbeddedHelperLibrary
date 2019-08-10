@@ -10,144 +10,241 @@
 
 namespace ehl
 {
-	template <typename T>
-	class optional
+	namespace detail
 	{
-	private:
-		alignas(alignof(T)) unsigned char valueData[sizeof(T)];
-		bool valid{false};
-
-		inline void destroy_object_if_it_exists()
+		template<typename T>
+		class optional_storage
 		{
-			if (valid)
+		private:
+			alignas(alignof(T)) unsigned char valueData[sizeof(T)];
+			bool valid{false};
+
+			inline void destroy_object_if_it_exists()
 			{
-				reinterpret_cast<T*>(valueData)->~T();
-			}
-		}
-
-	public:
-		optional() = default;
-
-		optional(optional const& other)
-			: valid{other.valid}
-		{
-			if (valid)
-			{
-				new (valueData) T{other.value()};
-			}
-		}
-
-		optional(optional&& other)
-			: valid{other.valid}
-		{
-			if (valid)
-			{
-				new (valueData) T{::ehl::as_rvalue(other.value())};
-			}
-		}
-
-		optional(T const& object)
-			: valid{true}
-		{
-			new (valueData) T{object};
-		}
-
-		optional(T&& object)
-			: valid{true}
-		{
-			new (valueData) T{::ehl::as_rvalue(object)};
-		}
-
-		~optional()
-		{
-			destroy_object_if_it_exists();
-		}
-
-		optional& operator=(optional const& other)
-		{
-			if(other.valid)
-			{
-				if(valid)
+				if (valid)
 				{
-					value() = other.value();
+					reinterpret_cast<T*>(valueData)->~T();
 				}
-				else
+			}
+
+		protected:
+			optional_storage() = default;
+
+			optional_storage(optional_storage const& other)
+				: valid{other.valid}
+			{
+				if (valid)
 				{
 					new(valueData) T{other.value()};
 				}
 			}
-			else
-			{
-				destroy_object_if_it_exists();
-			}
-			valid = other.valid;
-			return *this;
-		}
 
-		// clang-format off
-		template <typename U = T>
-		::ehl::enable_if_t<
-			(::ehl::is_move_constructible<U>::value == false) ||
-			(::ehl::is_move_assignable<U>::value == false),
-			optional&>
-		operator=(optional&& other) = delete;
-		// clang-format on
-
-		// clang-format off
-		template <typename U = T>
-		::ehl::enable_if_t<
-			::ehl::is_move_constructible<U>::value &&
-			::ehl::is_move_assignable<U>::value,
-			optional&>
-		operator=(optional&& other)
-		// clang-format on
-		{
-			if (other.valid)
+			optional_storage(optional_storage&& other)
+				: valid{other.valid}
 			{
 				if (valid)
 				{
-					value() = ::ehl::as_rvalue(other.value());
-				}
-				else
-				{
-					new (valueData) T{::ehl::as_rvalue(other.value())};
+					new(valueData) T{::ehl::as_rvalue(other.value())};
 				}
 			}
-			else
+
+			optional_storage(T const& object)
+				: valid{true}
+			{
+				new(valueData) T{object};
+			}
+
+			optional_storage(T&& object)
+				: valid{true}
+			{
+				new(valueData) T{::ehl::as_rvalue(object)};
+			}
+
+			~optional_storage()
 			{
 				destroy_object_if_it_exists();
 			}
-			valid = other.valid;
-			return *this;
+
+			optional_storage& operator=(optional_storage const& other)
+			{
+				if (other.valid)
+				{
+					if (valid)
+					{
+						value() = other.value();
+					}
+					else
+					{
+						new(valueData) T{other.value()};
+					}
+				}
+				else
+				{
+					destroy_object_if_it_exists();
+				}
+				valid = other.valid;
+				return *this;
+			}
+
+			optional_storage& operator=(optional_storage&& other)
+			{
+				if (other.valid)
+				{
+					if (valid)
+					{
+						value() = ::ehl::as_rvalue(other.value());
+					}
+					else
+					{
+						new(valueData) T{::ehl::as_rvalue(other.value())};
+					}
+				}
+				else
+				{
+					destroy_object_if_it_exists();
+				}
+				valid = other.valid;
+				return *this;
+			}
+
+			optional_storage& operator=(T const& other)
+			{
+				if (valid)
+				{
+					value() = other;
+				}
+				else
+				{
+					new(valueData) T{other};
+					valid = true;
+				}
+				return *this;
+			}
+
+		public:
+			bool is_valid() const
+			{
+				return valid;
+			}
+
+			T& value()
+			{
+				return *reinterpret_cast<T*>(valueData);
+			}
+
+			T const& value() const
+			{
+				return *reinterpret_cast<T const*>(valueData);
+			}
+		};
+	}  // namespace detail
+
+	template<typename T,
+		bool copyable = ::ehl::is_copy_constructible<T>::value && ::ehl::is_copy_assignable<T>::value,
+		bool movable = ::ehl::is_move_constructible<T>::value && ::ehl::is_move_assignable<T>::value
+	>
+	class optional;
+
+	template<typename T>
+	class optional<T, true, false> : public detail::optional_storage<T>
+	{
+	public:
+		optional() = default;
+
+		optional(T const& value)
+			: detail::optional_storage<T>{value}
+		{
 		}
 
 		optional& operator=(T const& other)
 		{
-			if (valid)
-			{
-				value() = other;
-			}
-			else
-			{
-				new (valueData) T{other};
-				valid = true;
-			}
+			detail::optional_storage<T>::operator=(other);
 			return *this;
 		}
 
-		bool is_valid() const
+		optional(optional const& other)
+			: detail::optional_storage<T>{other}
 		{
-			return valid;
 		}
 
-		T& value()
+		optional& operator=(optional const& other)
 		{
-			return *reinterpret_cast<T*>(valueData);
+			detail::optional_storage<T>::operator=(other);
+			return *this;
 		}
 
-		T const& value() const
+		optional(optional&&) = delete;
+		optional& operator=(optional&&) = delete;
+	};
+
+	template<typename T>
+	class optional<T, false, true> : public detail::optional_storage<T>
+	{
+	public:
+		optional() = default;
+
+		optional(T&& value)
+			: detail::optional_storage<T>{::ehl::as_rvalue(value)}
 		{
-			return *reinterpret_cast<T const*>(valueData);
+		}
+
+		optional(optional const&) = delete;
+		optional& operator=(optional const& other) = delete;
+
+		optional(optional&& other)
+			: detail::optional_storage<T>{::ehl::as_rvalue(other)}
+		{
+		}
+
+		optional& operator=(optional&& other)
+		{
+			detail::optional_storage<T>::operator=(::ehl::as_rvalue(other));
+			return *this;
+		}
+	};
+
+	template<typename T>
+	class optional<T, true, true> : public detail::optional_storage<T>
+	{
+	public:
+		optional() = default;
+
+		optional(T const& value)
+			: detail::optional_storage<T>{value}
+		{
+		}
+
+		optional& operator=(T const& other)
+		{
+			detail::optional_storage<T>::operator=(other);
+			return *this;
+		}
+
+		optional(T&& value)
+			: detail::optional_storage<T>{::ehl::as_rvalue(value)}
+		{
+		}
+
+		optional(optional const& other)
+			: detail::optional_storage<T>{other}
+		{
+		}
+
+		optional& operator=(optional const& other)
+		{
+			detail::optional_storage<T>::operator=(other);
+			return *this;
+		}
+
+		optional(optional&& other)
+			: detail::optional_storage<T>{::ehl::as_rvalue(other)}
+		{
+		}
+
+		optional& operator=(optional&& other)
+		{
+			detail::optional_storage<T>::operator=(::ehl::as_rvalue(other));
+			return *this;
 		}
 	};
 }  // namespace ehl
