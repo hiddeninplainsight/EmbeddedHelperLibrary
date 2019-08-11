@@ -312,3 +312,22 @@ HasConstructAssign<optional_no_copy, false, false, true, true> testOptionalNoCop
 HasConstructAssign<optional_no_move_construct, true, true, false, false> testOptionalNoMoveConstruct;
 HasConstructAssign<optional_no_move_assign, true, true, false, false> testOptionalNoMoveAssign;
 HasConstructAssign<optional_no_move, true, true, false, false> testOptionalNoMove;
+
+template<typename... From>
+struct is_constructable_from_t
+{
+	template<typename T>
+	using operation_t = decltype(T(::ehl::declval<From>()...));
+};
+
+template <class T, typename... From>
+using is_constructable_from = ::ehl::is_detected<is_constructable_from_t<From...>:: template operation_t, T>;
+
+static_assert(is_constructable_from<optional_all_allowed, everything_allowed const&>::value, "");
+static_assert(is_constructable_from<optional_all_allowed, everything_allowed&&>::value, "");
+
+static_assert(is_constructable_from<optional_no_copy, no_copy const&>::value == false, "");
+static_assert(is_constructable_from<optional_no_copy, no_copy&&>::value, "");
+
+static_assert(is_constructable_from<optional_no_move, no_move const&>::value, "");
+//static_assert(is_constructable_from<optional_no_move, no_move&&>::value == false, "");
