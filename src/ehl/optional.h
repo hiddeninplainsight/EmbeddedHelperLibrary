@@ -12,7 +12,7 @@ namespace ehl
 {
 	namespace detail
 	{
-		template<typename T>
+		template <typename T>
 		class optional_storage
 		{
 		private:
@@ -35,7 +35,7 @@ namespace ehl
 			{
 				if (valid)
 				{
-					new(valueData) T{other.value()};
+					new (valueData) T{other.value()};
 				}
 			}
 
@@ -44,20 +44,20 @@ namespace ehl
 			{
 				if (valid)
 				{
-					new(valueData) T{::ehl::as_rvalue(other.value())};
+					new (valueData) T{::ehl::as_rvalue(other.value())};
 				}
 			}
 
 			optional_storage(T const& object)
 				: valid{true}
 			{
-				new(valueData) T{object};
+				new (valueData) T{object};
 			}
 
 			optional_storage(T&& object)
 				: valid{true}
 			{
-				new(valueData) T{::ehl::as_rvalue(object)};
+				new (valueData) T{::ehl::as_rvalue(object)};
 			}
 
 			~optional_storage()
@@ -75,7 +75,7 @@ namespace ehl
 					}
 					else
 					{
-						new(valueData) T{other.value()};
+						new (valueData) T{other.value()};
 					}
 				}
 				else
@@ -96,7 +96,7 @@ namespace ehl
 					}
 					else
 					{
-						new(valueData) T{::ehl::as_rvalue(other.value())};
+						new (valueData) T{::ehl::as_rvalue(other.value())};
 					}
 				}
 				else
@@ -115,7 +115,7 @@ namespace ehl
 				}
 				else
 				{
-					new(valueData) T{other};
+					new (valueData) T{other};
 					valid = true;
 				}
 				return *this;
@@ -139,11 +139,15 @@ namespace ehl
 		};
 	}  // namespace detail
 
+	// clang-format off
 	template<typename T,
-		bool copyable = ::ehl::is_copy_constructible<T>::value && ::ehl::is_copy_assignable<T>::value,
-		bool movable = ::ehl::is_move_constructible<T>::value && ::ehl::is_move_assignable<T>::value
+		bool copyable = ::ehl::is_copy_constructible<T>::value &&
+			::ehl::is_copy_assignable<T>::value,
+		bool movable = ::ehl::is_move_constructible<T>::value &&
+			::ehl::is_move_assignable<T>::value
 	>
 	class optional;
+	// clang-format off
 
 	template<typename T>
 	class optional<T, true, false> : public detail::optional_storage<T>
