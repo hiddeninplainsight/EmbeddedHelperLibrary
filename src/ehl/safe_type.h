@@ -75,9 +75,12 @@ namespace ehl
 		: public detail::safe_type_common<T, Limit>,
 		  public Operation<safe_type_limited<Tag, T, Limit, Operation...>>...
 	{
-		using detail::safe_type_common<T, Limit>::safe_type_common;
-
 	public:
+		explicit constexpr safe_type_limited(T const& value)
+			: detail::safe_type_common<T, Limit>(value)
+		{
+		}
+
 		using type = safe_type_limited<Tag, T, Limit, Operation...>;
 
 		// Allow construct from r-value and assign to l-value but do not
@@ -104,7 +107,11 @@ namespace ehl
 		: public detail::safe_type_common<T, Limit>,
 		  public Operation<Derived>...
 	{
-		using detail::safe_type_common<T, Limit>::safe_type_common;
+	public:
+		explicit constexpr extendable_safe_type_limited(T const& value)
+			: detail::safe_type_common<T, Limit>(value)
+		{
+		}
 	};
 
 	template <typename Derived, typename T,
