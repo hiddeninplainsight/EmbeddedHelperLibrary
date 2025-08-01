@@ -258,6 +258,19 @@ namespace ehl
 				}
 			};
 		};
+
+		template <typename U>
+		struct explicitly_convert_to
+		{
+			template <typename T>
+			struct operation : crtp<T, operation<T>>
+			{
+				explicit operator U() const
+				{
+					return U{this->derived_object().raw_value()};
+				}
+			};
+		};
 	}  // namespace safe_type_operation
 }  // namespace ehl
 
