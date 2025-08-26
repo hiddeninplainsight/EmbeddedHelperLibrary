@@ -51,6 +51,8 @@ namespace ehl
 			, dataEnd(end)
 		{
 		}
+
+#ifndef EHL_NO_SFINAE
 		template <typename Cont,
 				  typename = enable_if_t<is_container<Cont>::value>>
 		span(Cont& cont)
@@ -58,6 +60,7 @@ namespace ehl
 			, dataEnd(&cont[0] + cont.size())
 		{
 		}
+#endif // EHL_NO_SFINAE
 
 		template <std::size_t length>
 		span(T (&data)[length])
